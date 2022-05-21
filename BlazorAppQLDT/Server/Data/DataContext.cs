@@ -19,5 +19,6 @@
         }
         public DbSet<SuperHero> SuperHeroes { get; set; }
         public DbSet<Comic> Comics { get; set; }
+        public DbSet<SinhvienModel> Sinhviens { get; set; }
     }
 }

@@ -1,0 +1,103 @@
+﻿@page "/sinhviendetail"
+@page "/sinhviendetail/{id:int}"
+@inject ISinhvienService SinhvienServices
+@inject NavigationManager NavigationManager
+@if (Id == null)
+{
+    <PageTitle>Create a new student</PageTitle>
+    <h3>Create a new student</h3>
+}
+else
+{
+    
+}
+<EditForm Model="student" OnSubmit="HandleSubmit">
+    @*<div>
+        <label for="tenhocsinh">ten hoc sinh</label>
+        <InputText id="name" @bind-Value="student.Name" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="Ngaysinh">Ngay sinh</label>
+        <InputDate id="ngaysinh" @bind-Value="student.Ngaysinh" class="form-control"></InputDate>
+    </div>
+    <div>
+        <label for="Nganh">Nganh</label>
+        <InputText id="nganh" @bind-Value="student.Nganh" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="Hedaotao">He dao tao</label>
+        <InputText id="hedaotao" @bind-Value="student.Hedaotao" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="Ketqua">Ket qua</label>
+        <InputText id="ketqua" @bind-Value="student.Ketqua" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="Hinhthuc">Hinh thuc</label>
+        <InputText id="hinhthuc" @bind-Value="student.Hinhthuc" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="Tinhtrang">Tinh trang</label>
+        <InputText id="tinhtrang" @bind-Value="student.Tinhtrang" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="Mail">Email</label>
+        <InputText id="mail" @bind-Value="student.Mail" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="Checkmail">check mail</label>
+        <InputNumber id="checkmail" @bind-Value="student.check_mail" class="form-control"></InputNumber>
+    </div>*@
+    
+    <br />
+    <button type="submit" class="btn btn-primary">@btnText</button>
+    <button type="button" class="btn btn-danger" @onclick="DeleteSinhvien">Delete</button>
+    <button type="button" class="btn btn-danger" @onclick="Cancel">Cancel</button>
+</EditForm>
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    string btnText = string.Empty;
+
+    SinhvienModel student = new SinhvienModel();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        btnText = Id == null ? "Save" : "Update";
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id == null)
+        {
+            //student.Id = SinhvienServices.Sinhvienservices[0].Id;
+        }
+        else
+        {
+            student = await SinhvienServices.GetSingleSinhvien((int)Id);
+        }
+        
+    }
+
+    async Task HandleSubmit()
+    {
+        if (Id == null)
+        {
+            await SinhvienServices.CreateSinhvien(student);
+        }
+        else
+        {
+            await SinhvienServices.UpdateSinhvien(student);
+        }
+    }
+
+    async Task DeleteSinhvien()
+    {
+        await SinhvienServices.DeleteSinhvien(student.Id);
+    }
+    async Task Cancel()
+    {
+        NavigationManager.NavigateTo("/sinhvien");
+    }
+}

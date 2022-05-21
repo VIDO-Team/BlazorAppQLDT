@@ -1,4 +1,5 @@
 global using BlazorAppQLDT.Client.Services.SuperHeroService;
+global using BlazorAppQLDT.Client.Services.SinhvienService;
 global using BlazorAppQLDT.Shared;
 global using System.Net.Http.Json;
 using BlazorAppQLDT.Client;
@@ -16,6 +17,7 @@ builder.Services.AddHttpClient("BlazorAppQLDT.ServerAPI", client => client.BaseA
 // Supply HttpClient instances that include access tokens when making requests to the server project
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlazorAppQLDT.ServerAPI"));
 builder.Services.AddScoped<ISuperHeroService, SuperHeroService>();
+builder.Services.AddScoped<ISinhvienService, SinhvienService>();
 
 builder.Services.AddApiAuthorization();
 

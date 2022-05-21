@@ -1,0 +1,109 @@
+﻿@page "/sinhvien"
+@using System.Data
+@using System.IO
+@using NPOI.XSSF.UserModel
+@using NPOI.SS.UserModel
+@inject ISinhvienService SinhvienServices
+@inject NavigationManager NavigationManager
+<h3>Sinhvien</h3>  
+<button class="btn btn-primary" @onclick="CreateAndEditSinhvien">Add sinh vien</button>
+<InputFile OnChange="@ImportExcelFile"/>
+<table class="table">
+    <thead>
+        <tr>
+            @*@foreach(DataColumn col in dataTable.Columns)
+            {
+                <th>@col.ColumnName</th>
+            }*@
+            <th>Id</th>
+            <th>Tên</th>
+            <th>Ngày sinh</th>
+            <th>Ngành</th>
+            <th>Hệ đào tạo</th>
+            <th>Kết quả</th>
+            <th>Hình thức</th>
+            <th>Tình trạng</th>
+            <th>Email</th>
+            <th>Check mail</th>
+            <th>Image name</th>
+            <th>Image time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var student in SinhvienServices.Sinhvienservices)
+        {
+            <tr>
+                <td>@student.Id</td>
+                <td>@student.Name</td>
+                <td>@student.Ngaysinh</td>
+                <td>@student.Nganh</td>
+                <td>@student.Hedaotao</td>
+                <td>@student.Ketqua</td>
+                <td>@student.Hinhthuc</td>
+                <td>@student.Tinhtrang</td>
+                <td>@student.Mail</td>
+                <td>@student.check_mail</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(() => ShowSinhvien(student.Id))"><i class="oi oi-pencil"></i></button>
+                </td>
+            </tr>
+        }
+        @*@foreach(DataRow row in dataTable.Rows)
+            {
+                <tr>
+                    @foreach(DataColumn col in dataTable.Columns)
+                        {
+                            <td>@row[col.ColumnName].ToString()</td>                            
+                        }                        
+                </tr>
+            }*@
+    </tbody>
+</table>
+@code {
+    DataTable dataTable = new DataTable();
+    protected override async Task OnInitializedAsync()
+    {   
+        await SinhvienServices.GetSinhvienDetail();
+    }
+    void CreateAndEditSinhvien()
+    {
+        NavigationManager.NavigateTo("/sinhviendetail");
+    }
+    void ShowSinhvien(int id)
+    {
+        NavigationManager.NavigateTo($"sinhviendetail/{id}");
+    }
+    async Task ImportExcelFile(InputFileChangeEventArgs e)
+    {
+        var filestream = e.File.OpenReadStream();
+        var ms = new MemoryStream();
+        await filestream.CopyToAsync(ms);
+        filestream.Close();
+        ms.Position = 0;
+        ISheet sheet;
+        var xsswb = new XSSFWorkbook(ms);
+
+        sheet = xsswb.GetSheetAt(0);
+        IRow hr = sheet.GetRow(0);
+        var rl = new List<string>();
+        int cc = hr.LastCellNum;
+        for(var j = 0; j < cc; j++)
+        {
+            ICell cell = hr.GetCell(j);
+            dataTable.Columns.Add(cell.ToString());
+        }
+        for (var j = (sheet.FirstRowNum + 1); j <= sheet.LastRowNum; j++)
+        {
+            var r = sheet.GetRow(j);
+            for(var i=r.FirstCellNum; i<cc; i++)
+            {
+                rl.Add(r.GetCell(i).ToString());
+            }
+            if(rl.Count() > 0)
+            {
+                dataTable.Rows.Add(rl.ToArray());
+            }
+            rl.Clear();
+        }
+    }
+}
