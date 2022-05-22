@@ -7,14 +7,10 @@
 @inject NavigationManager NavigationManager
 <h3>Sinhvien</h3>  
 <button class="btn btn-primary" @onclick="CreateAndEditSinhvien">Add sinh vien</button>
-<InputFile OnChange="@ImportExcelFile"/>
+<InputFile OnChange="@ImportExcelFile">Import Data</InputFile>
 <table class="table">
     <thead>
         <tr>
-            @*@foreach(DataColumn col in dataTable.Columns)
-            {
-                <th>@col.ColumnName</th>
-            }*@
             <th>Id</th>
             <th>Tên</th>
             <th>Ngày sinh</th>
@@ -25,8 +21,6 @@
             <th>Tình trạng</th>
             <th>Email</th>
             <th>Check mail</th>
-            <th>Image name</th>
-            <th>Image time</th>
         </tr>
     </thead>
     <tbody>
@@ -48,7 +42,7 @@
                 </td>
             </tr>
         }
-        @*@foreach(DataRow row in dataTable.Rows)
+        @foreach(DataRow row in dataTable.Rows)
             {
                 <tr>
                     @foreach(DataColumn col in dataTable.Columns)
@@ -56,7 +50,7 @@
                             <td>@row[col.ColumnName].ToString()</td>                            
                         }                        
                 </tr>
-            }*@
+            }
     </tbody>
 </table>
 @code {

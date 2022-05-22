@@ -12,7 +12,7 @@ else
     
 }
 <EditForm Model="student" OnSubmit="HandleSubmit">
-    @*<div>
+    <div>
         <label for="tenhocsinh">ten hoc sinh</label>
         <InputText id="name" @bind-Value="student.Name" class="form-control"></InputText>
     </div>
@@ -47,7 +47,7 @@ else
     <div>
         <label for="Checkmail">check mail</label>
         <InputNumber id="checkmail" @bind-Value="student.check_mail" class="form-control"></InputNumber>
-    </div>*@
+    </div>
     
     <br />
     <button type="submit" class="btn btn-primary">@btnText</button>
