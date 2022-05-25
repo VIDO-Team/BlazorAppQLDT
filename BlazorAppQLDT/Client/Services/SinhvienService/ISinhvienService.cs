@@ -1,4 +1,6 @@
-﻿namespace BlazorAppQLDT.Client.Services.SinhvienService
+﻿using Microsoft.AspNetCore.Components.Forms;
+
+namespace BlazorAppQLDT.Client.Services.SinhvienService
 {
     public interface ISinhvienService
     {
@@ -8,5 +10,6 @@
         Task UpdateSinhvien(SinhvienModel student);
         Task DeleteSinhvien(int id);
         Task<SinhvienModel> GetSingleSinhvien(int id);
+        
     }
 }

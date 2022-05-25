@@ -1,13 +1,24 @@
 ﻿@page "/sinhvien"
 @using System.Data
 @using System.IO
+@using Microsoft.Extensions.Logging
 @using NPOI.XSSF.UserModel
 @using NPOI.SS.UserModel
+@using System.Text.Json
+@using BlazorAppQLDT.Client.Services.ExcelService
+@using System.Net.Http.Headers
+@using System.Linq
+@inject HttpClient _Http
 @inject ISinhvienService SinhvienServices
+@inject IExcelService ExcelServices
 @inject NavigationManager NavigationManager
-<h3>Sinhvien</h3>  
+<h3>Sinh vien</h3>  
 <button class="btn btn-primary" @onclick="CreateAndEditSinhvien">Add sinh vien</button>
-<InputFile OnChange="@ImportExcelFile">Import Data</InputFile>
+
+<p>
+    <button onclick="document.getElementById('import').click()">Import</button>
+    <InputFile id="import" OnChange="@ImportExcelFile" hidden mutiple></InputFile>
+</p>
 <table class="table">
     <thead>
         <tr>
@@ -55,6 +66,9 @@
 </table>
 @code {
     DataTable dataTable = new DataTable();
+    HttpClient client = new HttpClient();
+    SinhvienModel objStudent = new SinhvienModel();  
+
     protected override async Task OnInitializedAsync()
     {   
         await SinhvienServices.GetSinhvienDetail();
@@ -67,6 +81,7 @@
     {
         NavigationManager.NavigateTo($"sinhviendetail/{id}");
     }
+
     async Task ImportExcelFile(InputFileChangeEventArgs e)
     {
         var filestream = e.File.OpenReadStream();
@@ -81,6 +96,7 @@
         IRow hr = sheet.GetRow(0);
         var rl = new List<string>();
         int cc = hr.LastCellNum;
+
         for(var j = 0; j < cc; j++)
         {
             ICell cell = hr.GetCell(j);
@@ -96,8 +112,21 @@
             if(rl.Count() > 0)
             {
                 dataTable.Rows.Add(rl.ToArray());
+
+                objStudent.Name = Convert.ToString(rl[1]);  
+                objStudent.Ngaysinh = Convert.ToDateTime(rl[2]);  
+                objStudent.Nganh = Convert.ToString(rl[3]);  
+                objStudent.Hedaotao = Convert.ToString(rl[4]);  
+                objStudent.Ketqua = Convert.ToString(rl[5]);  
+                objStudent.Hinhthuc = Convert.ToString(rl[6]);  
+                objStudent.Tinhtrang = Convert.ToString(rl[7]);  
+                objStudent.Mail = Convert.ToString(rl[8]);  
+                objStudent.check_mail = Convert.ToInt32(rl[9]);
+                await ExcelServices.CreateExcelDetail(objStudent);
             }
             rl.Clear();
         }
-    }
+
+}
+    
 }

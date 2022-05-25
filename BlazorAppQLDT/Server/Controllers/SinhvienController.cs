@@ -1,5 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ExcelDataReader;
+using System.Data;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web;
+using BlazorAppQLDT.Server.Data;
 
 namespace BlazorAppQLDT.Server.Controllers
 {
@@ -8,6 +17,8 @@ namespace BlazorAppQLDT.Server.Controllers
     public class SinhvienController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IWebHostEnvironment env;
+        private readonly ILogger<SinhvienController> logger;
         public SinhvienController(DataContext context)
         {
             _context = context;
@@ -22,11 +33,13 @@ namespace BlazorAppQLDT.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<List<SinhvienModel>>> CreateSinhVien(SinhvienModel student)
         {
+            Console.WriteLine("COntroller 1");
             _context.Sinhviens.Add(student);
             await _context.SaveChangesAsync();
 
-            return Ok(await GetSinhvienDetail());
+            return Ok(student);
         }
+     
         [HttpGet("{id}")]
         public async Task<ActionResult<SinhvienModel>> GetSingleHero(int id)
         {

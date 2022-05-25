@@ -1,6 +1,10 @@
 ﻿using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components;
 using System.Text.Json;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Data;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace BlazorAppQLDT.Client.Services.SinhvienService
 {
@@ -8,6 +12,7 @@ namespace BlazorAppQLDT.Client.Services.SinhvienService
     {
         public readonly HttpClient _http;
         private readonly NavigationManager _navigationManager;
+        DataTable dataTable = new DataTable();
         public List<SinhvienModel> Sinhvienservices { get; set; } = new List<SinhvienModel>();
         public SinhvienService(HttpClient http, NavigationManager navigationManager)
         {
