@@ -1,0 +1,53 @@
+@page "/faqapps"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using BlazorAppQLDT.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject IFAQAppService FAQAppService
+@inject NavigationManager NavigationManager
+
+<PageTitle>FAQ</PageTitle>
+
+    <h3>FAQ</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>QuestionId</th>
+            <th>Questtion</th>
+            <th>Answers</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var faq in FAQAppService.FAQApps)
+       {
+           <tr>
+               <td>@faq.QuestionId</td>
+               <td>@faq.Question</td>
+               <td>@faq.Answers</td>
+               <td>
+                   <button class = "btn btn-primary" @onclick="(() => ShowFAQ(faq.QuestionId))">
+                       <i class="oi oi-pencil"></i>
+                   </button>
+               </td>
+           </tr>
+       }
+    </tbody>
+</table>
+<button class="btn btn-primary" @onclick="CreateNewFAQ">Create FAQ</button>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await FAQAppService.GetFAQApps();
+    }
+    void ShowFAQ(int id)
+    {
+        NavigationManager.NavigateTo($"faq/{id}");
+    }
+    void CreateNewFAQ()
+    {
+        NavigationManager.NavigateTo($"faq");
+    }
+}
