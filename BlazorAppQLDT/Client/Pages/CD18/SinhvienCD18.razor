@@ -115,15 +115,16 @@
             {
                 dataTable.Rows.Add(rl.ToArray());
 
-                objStudent.Hoten = Convert.ToString(rl[1]);  
-                objStudent.Ngaysinh = Convert.ToInt32(rl[2]);  
-                objStudent.Thangsinh = Convert.ToInt32(rl[3]);  
-                objStudent.Namsinh = Convert.ToInt32(rl[4]);  
-                objStudent.IdNumber = Convert.ToString(rl[5]);  
-                objStudent.Truong = Convert.ToString(rl[6]);  
-                objStudent.Lop = Convert.ToString(rl[7]);  
-                objStudent.Sodienthoai = Convert.ToString(rl[8]);  
-                objStudent.Status = Convert.ToInt32(rl[9]);
+                objStudent.Tinh = Convert.ToString(rl[1]);
+                objStudent.Hoten = Convert.ToString(rl[2]);  
+                objStudent.Ngaysinh = Convert.ToInt32(rl[3]);  
+                objStudent.Thangsinh = Convert.ToInt32(rl[4]);  
+                objStudent.Namsinh = Convert.ToInt32(rl[5]);  
+                objStudent.IdNumber = Convert.ToString(rl[6]);  
+                objStudent.Truong = Convert.ToString(rl[7]);  
+                objStudent.Lop = Convert.ToString(rl[8]);  
+                objStudent.Sodienthoai = Convert.ToString(rl[9]);  
+                objStudent.Status = Convert.ToInt32(rl[10]);
                 await ExcelServices.CreateExcelCD18Detail(objStudent);
             }
             rl.Clear();
