@@ -1,0 +1,132 @@
+﻿@page "/CD18"
+@using System.Data
+@using System.IO
+@using Microsoft.Extensions.Logging
+@using NPOI.XSSF.UserModel
+@using NPOI.SS.UserModel
+@using System.Text.Json
+@using BlazorAppQLDT.Client.Services.ExcelService
+@using System.Net.Http.Headers
+@using System.Linq
+@inject HttpClient _Http
+@inject ISinhvienCD18Service _sinhvienCD18Service
+@inject IExcelService ExcelServices
+@inject NavigationManager NavigationManager
+<h3>Sinh vien CD18</h3>  
+<button class="btn btn-primary" @onclick="CreateAndEditSinhvien">Add sinh vien</button>
+
+<p>
+    <button onclick="document.getElementById('import').click()">Import</button>
+    <InputFile id="import" OnChange="@ImportExcelFile" hidden mutiple></InputFile>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Tên</th>
+            <th>Ngày sinh</th>
+            <th>Tháng sinh</th>
+            <th>Năm sinh</th>
+            <th>Id Number</th>
+            <th>Trường</th>
+            <th>Lớp</th>
+            <th>Số điện thoại</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var student in _sinhvienCD18Service.Sinhvienservices)
+        {
+            <tr>
+                <td>@student.Id</td>
+                <td>@student.Hoten</td>
+                <td>@student.Ngaysinh</td>
+                <td>@student.Thangsinh</td>
+                <td>@student.Namsinh</td>
+                <td>@student.IdNumber</td>
+                <td>@student.Truong</td>
+                <td>@student.Lop</td>
+                <td>@student.Sodienthoai</td>
+                <td>@student.Status</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(() => ShowSinhvien(student.Id))"><i class="oi oi-pencil"></i></button>
+                </td>
+            </tr>
+        }
+        @foreach(DataRow row in dataTable.Rows)
+            {
+                <tr>
+                    @foreach(DataColumn col in dataTable.Columns)
+                        {
+                            <td>@row[col.ColumnName].ToString()</td>                            
+                        }                        
+                </tr>
+            }
+    </tbody>
+</table>
+@code {
+    DataTable dataTable = new DataTable();
+    HttpClient client = new HttpClient();
+    SinhvienCD18Model objStudent = new SinhvienCD18Model();  
+
+    protected override async Task OnInitializedAsync()
+    {   
+        await _sinhvienCD18Service.GetSinhvienDetail();
+    }
+    void CreateAndEditSinhvien()
+    {
+        NavigationManager.NavigateTo("/CD18detail");
+    }
+    void ShowSinhvien(int id)
+    {
+        NavigationManager.NavigateTo($"CD18detail/{id}");
+    }
+
+    async Task ImportExcelFile(InputFileChangeEventArgs e)
+    {
+        var filestream = e.File.OpenReadStream();
+        var ms = new MemoryStream();
+        await filestream.CopyToAsync(ms);
+        filestream.Close();
+        ms.Position = 0;
+        ISheet sheet;
+        var xsswb = new XSSFWorkbook(ms);
+
+        sheet = xsswb.GetSheetAt(0);
+        IRow hr = sheet.GetRow(0);
+        var rl = new List<string>();
+        int cc = hr.LastCellNum;
+
+        for(var j = 0; j < cc; j++)
+        {
+            ICell cell = hr.GetCell(j);
+            dataTable.Columns.Add(cell.ToString());
+        }
+        for (var j = (sheet.FirstRowNum + 1); j <= sheet.LastRowNum; j++)
+        {
+            var r = sheet.GetRow(j);
+            for(var i=r.FirstCellNum; i<cc; i++)
+            {
+                rl.Add(r.GetCell(i).ToString());
+            }
+            if(rl.Count() > 0)
+            {
+                dataTable.Rows.Add(rl.ToArray());
+
+                objStudent.Hoten = Convert.ToString(rl[1]);  
+                objStudent.Ngaysinh = Convert.ToInt32(rl[2]);  
+                objStudent.Thangsinh = Convert.ToInt32(rl[3]);  
+                objStudent.Namsinh = Convert.ToInt32(rl[4]);  
+                objStudent.IdNumber = Convert.ToString(rl[5]);  
+                objStudent.Truong = Convert.ToString(rl[6]);  
+                objStudent.Lop = Convert.ToString(rl[7]);  
+                objStudent.Sodienthoai = Convert.ToString(rl[8]);  
+                objStudent.Status = Convert.ToInt32(rl[9]);
+                await ExcelServices.CreateExcelCD18Detail(objStudent);
+            }
+            rl.Clear();
+        }
+
+}
+    
+}

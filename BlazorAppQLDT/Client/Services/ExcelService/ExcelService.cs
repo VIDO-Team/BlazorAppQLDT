@@ -18,13 +18,29 @@ namespace BlazorAppQLDT.Client.Services.ExcelService
             _navigationManager = navigationManager;
         }
         public List<SinhvienModel> Excelservices { get; set; } = new List<SinhvienModel>();
+        public List<SinhvienCD18Model> ExcelforCD18services { get; set; } = new List<SinhvienCD18Model>();
+
+        public async Task CreateExcelCD18Detail(SinhvienCD18Model student)
+        {
+            var result = await _http.PostAsJsonAsync("api/sinhvienCD18", student);
+            await SetSinhvienCD18(result);
+        }
+
         public async Task CreateExcelDetail(SinhvienModel student)
         {
-            Console.WriteLine("1");
             var result = await _http.PostAsJsonAsync("api/sinhvien", student);
-            Console.WriteLine("2");
             await SetSinhvien(result);
         }
+
+        public async Task GetExcelCD18Detail()
+        {
+            var resutl = await _http.GetFromJsonAsync<List<SinhvienCD18Model>>("api/sinhvienCD18");
+            if (resutl != null)
+            {
+                ExcelforCD18services = resutl;
+            }
+        }
+
         public async Task GetExcelDetail()
         {
             var resutl = await _http.GetFromJsonAsync<List<SinhvienModel>>("api/sinhvien");
@@ -37,6 +53,11 @@ namespace BlazorAppQLDT.Client.Services.ExcelService
         {
             Console.WriteLine(result.StatusCode);
             _navigationManager.NavigateTo("sinhvien");
+        }
+        private async Task SetSinhvienCD18(HttpResponseMessage result)
+        {
+            Console.WriteLine(result.StatusCode);
+            _navigationManager.NavigateTo("CD18");
         }
     }
 }

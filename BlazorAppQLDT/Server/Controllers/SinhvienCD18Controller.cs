@@ -1,25 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ExcelDataReader;
-using System.Data;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web;
-using BlazorAppQLDT.Server.Data;
 
 namespace BlazorAppQLDT.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SinhvienController : ControllerBase
+    public class SinhvienCD18Controller : ControllerBase
     {
         private readonly DataContext _context;
         private readonly IWebHostEnvironment env;
         private readonly ILogger<SinhvienController> logger;
-        public SinhvienController(DataContext context)
+        public SinhvienCD18Controller(DataContext context)
         {
             _context = context;
         }
@@ -27,22 +18,22 @@ namespace BlazorAppQLDT.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<SinhvienModel>>> GetSinhvienDetail()
         {
-            var resutl = _context.Sinhviens.ToList();
+            var resutl = _context.SinhvienCD18.ToList();
             return Ok(resutl);
         }
         [HttpPost]
-        public async Task<ActionResult<List<SinhvienModel>>> CreateSinhVien(SinhvienModel student)
+        public async Task<ActionResult<List<SinhvienModel>>> CreateSinhVien(SinhvienCD18Model student)
         {
-            _context.Sinhviens.Add(student);
+            _context.SinhvienCD18.Add(student);
             await _context.SaveChangesAsync();
 
             return Ok(student);
         }
-     
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<SinhvienModel>> GetSingleHero(int id)
+        public async Task<ActionResult<SinhvienCD18Model>> GetSingleHero(int id)
         {
-            var student = await _context.Sinhviens.FirstOrDefaultAsync(h => h.Id == id);
+            var student = await _context.SinhvienCD18.FirstOrDefaultAsync(h => h.Id == id);
             if (student == null)
             {
                 return NotFound("Sorry, no hero here. :/");
@@ -50,34 +41,34 @@ namespace BlazorAppQLDT.Server.Controllers
             return Ok(student);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<SinhvienModel>>> UpdateSuperHero(SinhvienModel student, int id)
+        public async Task<ActionResult<List<SinhvienCD18Model>>> UpdateSuperHero(SinhvienCD18Model student, int id)
         {
-            var dbStudent = await _context.Sinhviens
+            var dbStudent = await _context.SinhvienCD18
                 .FirstOrDefaultAsync(sh => sh.Id == id);
             if (dbStudent == null)
                 return NotFound("Sorry, but no hero for you. :/");
 
-            dbStudent.Name = student.Name;
+            dbStudent.Hoten = student.Hoten;
             dbStudent.Ngaysinh = student.Ngaysinh;
-            dbStudent.Nganh = student.Nganh;
-            dbStudent.Hedaotao = student.Hedaotao;
-            dbStudent.Ketqua = student.Ketqua;
-            dbStudent.Hinhthuc = student.Hinhthuc;
-            dbStudent.Tinhtrang = student.Tinhtrang;
-            dbStudent.Mail = student.Mail;
-            dbStudent.check_mail = student.check_mail;
+            dbStudent.Thangsinh = student.Thangsinh;
+            dbStudent.Namsinh = student.Namsinh;
+            dbStudent.IdNumber = student.IdNumber;
+            dbStudent.Truong = student.Truong;
+            dbStudent.Lop = student.Lop;
+            dbStudent.Sodienthoai = student.Sodienthoai;
+            dbStudent.Status = student.Status;
             await _context.SaveChangesAsync();
 
             return Ok(await GetSinhvienDetail());
         }
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<SinhvienModel>>> DeleteSinhvien(int id)
+        public async Task<ActionResult<List<SinhvienCD18Model>>> DeleteSinhvien(int id)
         {
-            var dbStudent = await _context.Sinhviens.FirstOrDefaultAsync(sh => sh.Id == id);
+            var dbStudent = await _context.SinhvienCD18.FirstOrDefaultAsync(sh => sh.Id == id);
             if (dbStudent == null)
                 return NotFound("Sorry, but no student for you. :/");
 
-            _context.Sinhviens.Remove(dbStudent);
+            _context.SinhvienCD18.Remove(dbStudent);
             await _context.SaveChangesAsync();
 
             return Ok(await GetSinhvienDetail());

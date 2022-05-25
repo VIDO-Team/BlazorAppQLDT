@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorAppQLDT.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220521145955_Initial")]
+    [Migration("20220525031721_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,55 @@ namespace BlazorAppQLDT.Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("BlazorAppQLDT.Shared.SinhvienCD18", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Hoten")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Lop")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Namsinh")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Ngaysinh")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Sodienthoai")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Status")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Thangsinh")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Truong")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SinhvienCD18");
+                });
 
             modelBuilder.Entity("BlazorAppQLDT.Shared.SinhvienModel", b =>
                 {

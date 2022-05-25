@@ -1,5 +1,6 @@
 global using BlazorAppQLDT.Client.Services.SuperHeroService;
 global using BlazorAppQLDT.Client.Services.SinhvienService;
+global using BlazorAppQLDT.Client.Services.SinhvienCD18Service;
 global using BlazorAppQLDT.Client.Services.ExcelService;
 global using BlazorAppQLDT.Shared;
 global using System.Net.Http.Json;
@@ -19,6 +20,7 @@ builder.Services.AddHttpClient("BlazorAppQLDT.ServerAPI", client => client.BaseA
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlazorAppQLDT.ServerAPI"));
 builder.Services.AddScoped<ISuperHeroService, SuperHeroService>();
 builder.Services.AddScoped<ISinhvienService, SinhvienService>();
+builder.Services.AddScoped<ISinhvienCD18Service, SinhvienCD18Service>();
 builder.Services.AddScoped<IExcelService, ExcelService>();
 builder.Services.AddApiAuthorization();
 

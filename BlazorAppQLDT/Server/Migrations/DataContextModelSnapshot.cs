@@ -22,7 +22,7 @@ namespace BlazorAppQLDT.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("BlazorAppQLDT.Shared.SinhvienModel", b =>
+            modelBuilder.Entity("BlazorAppQLDT.Shared.SinhvienCD18", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,45 +30,45 @@ namespace BlazorAppQLDT.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Hedaotao")
+                    b.Property<string>("Hoten")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Hinhthuc")
+                    b.Property<string>("IdNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Ketqua")
+                    b.Property<string>("Lop")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Mail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nganh")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Ngaysinh")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Tinhtrang")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("check_mail")
+                    b.Property<int?>("Namsinh")
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<int?>("Ngaysinh")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Sodienthoai")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Status")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Thangsinh")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Truong")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Sinhviens");
+                    b.ToTable("SinhvienCD18");
                 });
 #pragma warning restore 612, 618
         }
