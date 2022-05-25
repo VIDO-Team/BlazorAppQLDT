@@ -22,7 +22,7 @@ namespace BlazorAppQLDT.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("BlazorAppQLDT.Shared.SinhvienCD18", b =>
+            modelBuilder.Entity("BlazorAppQLDT.Shared.SinhvienCD18Model", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,6 +62,10 @@ namespace BlazorAppQLDT.Server.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<string>("Tinh")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Truong")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -70,6 +74,8 @@ namespace BlazorAppQLDT.Server.Migrations
 
                     b.ToTable("SinhvienCD18");
                 });
+
+            
 #pragma warning restore 612, 618
         }
     }

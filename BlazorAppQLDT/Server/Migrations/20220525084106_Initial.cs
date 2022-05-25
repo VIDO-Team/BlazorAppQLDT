@@ -15,6 +15,7 @@ namespace BlazorAppQLDT.Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Tinh = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Hoten = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Ngaysinh = table.Column<int>(type: "int", nullable: false),
                     Thangsinh = table.Column<int>(type: "int", nullable: false),
@@ -35,6 +36,8 @@ namespace BlazorAppQLDT.Server.Migrations
         {
             migrationBuilder.DropTable(
                 name: "SinhvienCD18");
+
+           
         }
     }
 }

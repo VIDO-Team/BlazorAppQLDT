@@ -8,6 +8,7 @@ namespace BlazorAppQLDT.Client.Services.SinhvienService
         Task GetSinhvienDetail();
         Task CreateSinhvien(SinhvienModel student);
         Task UpdateSinhvien(SinhvienModel student);
+        Task SearchSinhvien(string name);
         Task DeleteSinhvien(int id);
         Task<SinhvienModel> GetSingleSinhvien(int id);
         

@@ -30,6 +30,12 @@ namespace BlazorAppQLDT.Server.Controllers
             var resutl = _context.Sinhviens.ToList();
             return Ok(resutl);
         }
+        [HttpGet("search/{name}")]
+        public async Task<ActionResult<List<SinhvienModel>>> SearchSinhvien(string name)
+        {
+            var resutl = await _context.Sinhviens.Where(s => s.Name.ToLower().Contains(name.ToLower())).ToListAsync();
+            return Ok(resutl);
+        }
         [HttpPost]
         public async Task<ActionResult<List<SinhvienModel>>> CreateSinhVien(SinhvienModel student)
         {
@@ -50,7 +56,7 @@ namespace BlazorAppQLDT.Server.Controllers
             return Ok(student);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<SinhvienModel>>> UpdateSuperHero(SinhvienModel student, int id)
+        public async Task<ActionResult<List<SinhvienModel>>> UpdateSinhvien(SinhvienModel student, int id)
         {
             var dbStudent = await _context.Sinhviens
                 .FirstOrDefaultAsync(sh => sh.Id == id);

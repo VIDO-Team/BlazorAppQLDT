@@ -58,5 +58,14 @@ namespace BlazorAppQLDT.Client.Services.SinhvienService
             var result = await _http.DeleteAsync($"api/sinhvien/{id}");
             await SetSinhvien(result);
         }
+
+        public async Task SearchSinhvien(string name)
+        {
+            var resutl = await _http.GetFromJsonAsync<List<SinhvienModel>>($"api/sinhvien/search/{name}");
+            if (resutl != null)
+            {
+                Sinhvienservices = resutl;
+            }
+        }
     }
 }

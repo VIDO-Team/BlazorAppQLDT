@@ -14,6 +14,8 @@ namespace BlazorAppQLDT.Shared
         [Required]
         public int Id { get; set; }
         [Required]
+        public string Tinh { get; set; } = String.Empty;
+        [Required]
         public string Hoten { get; set; } = String.Empty;
         [Required]
         public int? Ngaysinh { get; set; }

@@ -19,6 +19,7 @@
     <button onclick="document.getElementById('import').click()">Import</button>
     <InputFile id="import" OnChange="@ImportExcelFile" hidden mutiple></InputFile>
 </p>
+<input type="text" placeholder="Nhập tên" @bind-value="@searchTerm"/><button type="submit" @onclick="(()=>SearchTerm())">Search</button>
 <table class="table">
     <thead>
         <tr>
@@ -68,6 +69,7 @@
     DataTable dataTable = new DataTable();
     HttpClient client = new HttpClient();
     SinhvienModel objStudent = new SinhvienModel();  
+    private string searchTerm;
 
     protected override async Task OnInitializedAsync()
     {   
@@ -81,7 +83,14 @@
     {
         NavigationManager.NavigateTo($"sinhviendetail/{id}");
     }
-
+    async void SearchTerm()
+    {
+        await SinhvienServices.SearchSinhvien(searchTerm);
+        if(searchTerm == null)
+        {
+            await SinhvienServices.GetSinhvienDetail();
+        }
+    }
     async Task ImportExcelFile(InputFileChangeEventArgs e)
     {
         var filestream = e.File.OpenReadStream();

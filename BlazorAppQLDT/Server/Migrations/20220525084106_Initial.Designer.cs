@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorAppQLDT.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220525031721_Initial")]
+    [Migration("20220525084106_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace BlazorAppQLDT.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("BlazorAppQLDT.Shared.SinhvienCD18", b =>
+            modelBuilder.Entity("BlazorAppQLDT.Shared.SinhvienCD18Model", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,6 +63,10 @@ namespace BlazorAppQLDT.Server.Migrations
                     b.Property<int?>("Thangsinh")
                         .IsRequired()
                         .HasColumnType("int");
+
+                    b.Property<string>("Tinh")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Truong")
                         .IsRequired()

@@ -15,19 +15,23 @@ else
 }
 <EditForm Model="student" OnSubmit="HandleSubmit">
     <div>
-        <label for="hoten">ten hoc sinh</label>
+        <label for="tinh">Tỉnh</label>
+        <InputText id="tinh" @bind-Value="student.Tinh" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="hoten">Tên học sinh</label>
         <InputText id="hoten" @bind-Value="student.Hoten" class="form-control"></InputText>
     </div>
     <div>
-        <label for="Ngaysinh">Ngay sinh</label>
+        <label for="Ngaysinh">Ngày sinh</label>
         <InputNumber id="ngaysinh" @bind-Value="student.Ngaysinh" class="form-control"></InputNumber>
     </div>
     <div>
-        <label for="Thangsinh">Thangsinh</label>
+        <label for="Thangsinh">Tháng sinh</label>
         <InputNumber id="Thangsinh" @bind-Value="student.Thangsinh" class="form-control"></InputNumber>
     </div>
     <div>
-        <label for="Namsinh">Namsinh</label>
+        <label for="Namsinh">Năm sinh</label>
         <InputNumber id="Namsinh" @bind-Value="student.Namsinh" class="form-control"></InputNumber>
     </div>
     <div>
@@ -35,15 +39,15 @@ else
         <InputText id="IdNumber" @bind-Value="student.IdNumber" class="form-control"></InputText>
     </div>
     <div>
-        <label for="Truong">Truong</label>
+        <label for="Truong">Trường</label>
         <InputText id="Truong" @bind-Value="student.Truong" class="form-control"></InputText>
     </div>
     <div>
-        <label for="Lop">Lop</label>
+        <label for="Lop">Lớp</label>
         <InputText id="Lop" @bind-Value="student.Lop" class="form-control"></InputText>
     </div>
     <div>
-        <label for="Sodienthoai">Sodienthoai</label>
+        <label for="Sodienthoai">Số điện thoại</label>
         <InputText id="Sodienthoai" @bind-Value="student.Sodienthoai" class="form-control"></InputText>
     </div>
     <div>
