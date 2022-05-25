@@ -86,10 +86,6 @@
     async void SearchTerm()
     {
         await SinhvienServices.SearchSinhvien(searchTerm);
-        if(searchTerm == null)
-        {
-            await SinhvienServices.GetSinhvienDetail();
-        }
     }
     async Task ImportExcelFile(InputFileChangeEventArgs e)
     {

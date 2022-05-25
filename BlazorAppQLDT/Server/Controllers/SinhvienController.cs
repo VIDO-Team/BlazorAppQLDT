@@ -36,6 +36,12 @@ namespace BlazorAppQLDT.Server.Controllers
             var resutl = await _context.Sinhviens.Where(s => s.Name.ToLower().Contains(name.ToLower())).ToListAsync();
             return Ok(resutl);
         }
+        [HttpGet("search")]
+        public async Task<ActionResult<List<SinhvienModel>>> SearchNull()
+        {
+            var resutl = _context.Sinhviens.ToList();
+            return Ok(resutl);
+        }
         [HttpPost]
         public async Task<ActionResult<List<SinhvienModel>>> CreateSinhVien(SinhvienModel student)
         {
