@@ -15,7 +15,7 @@ namespace BlazorAppQLDT.Server.Controllers
             _context = context;
         }
         [HttpGet]
-        public async Task<ActionResult<List<FAQApp>>> GetFAQApps()
+        public async Task<ActionResult<List<FAQAppModel>>> GetFAQApps()
         {
             var faqapps = await _context.FAQApps.FromSqlRaw("SELECT * FROM FAQApp").ToListAsync();
             // var faqapps = await _context.FAQApps
@@ -29,10 +29,10 @@ namespace BlazorAppQLDT.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<FAQApp>> GetSingleFAQ(int id)
+        public async Task<ActionResult<FAQAppModel>> GetSingleFAQ(int id)
         {
-            var faq = await _context.FAQApps
-                .FirstOrDefaultAsync(h => h.QuestionId == id);
+            List<FAQAppModel> faqapps = await _context.FAQApps.FromSqlRaw("SELECT * FROM FAQApp").ToListAsync();
+            var faq = faqapps.FirstOrDefault(h => h.QuestionId == id);
             if(faq == null)
             {
                 return NotFound("Sorry no faq here");
@@ -41,14 +41,14 @@ namespace BlazorAppQLDT.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<FAQApp>> CreateFAQ(FAQApp faq)
+        public async Task<ActionResult<FAQAppModel>> CreateFAQ(FAQAppModel faq)
         {
             await _context.FAQApps.AddAsync(faq);
             await _context.SaveChangesAsync();
             return Ok(faq);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult<FAQApp>> UpdateFAQ(FAQApp faq, int id)
+        public async Task<ActionResult<FAQAppModel>> UpdateFAQ(FAQAppModel faq, int id)
         {
             var oldfaq = await _context.FAQApps
                 .FirstOrDefaultAsync(h => h.QuestionId == id);

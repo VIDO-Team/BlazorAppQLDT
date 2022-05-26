@@ -51,7 +51,7 @@ else
     public int? Id { get; set; }
     string btnText = string.Empty;
     string btnDelete = string.Empty;
-    FAQAppModel faq = new FAQApp();
+    FAQAppModel faq = new FAQAppModel();
     protected override async Task OnInitializedAsync()
     {
         btnText = Id == null ? "Add New FAQ" : "Update FAQ";
