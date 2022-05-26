@@ -6,6 +6,7 @@ namespace BlazorAppQLDT.Client.Services.SinhvienCD15Service
         public readonly HttpClient _http;
         private readonly NavigationManager _navigationManager;
         public List<SinhvienCD15Model> Sinhvienservices { get; set; } = new List<SinhvienCD15Model>();
+        
         public SinhvienCD15Service(HttpClient http, NavigationManager navigationManager)
         {
             _http = http;

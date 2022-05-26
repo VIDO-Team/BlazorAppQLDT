@@ -12,7 +12,17 @@ namespace BlazorAppQLDT.Server.Controllers
         {
             _context = context;
         }
-
+        //get Key
+        [HttpGet("applicationconfig")]
+        public async Task<ActionResult<List<ApplicationConfig>>> GetKey()
+        {
+            var resutl = _context.ApplicationConfigs.FirstOrDefault(a => a.Id >= 1);
+            if (resutl.LastUpdatedDateTime.AddMinutes(-50) > DateTime.Now)
+            {
+                return null;
+            }
+            return Ok(resutl);
+        }
         [HttpGet("search/{name}")]
         public async Task<ActionResult<List<SinhvienModel>>> SearchSinhvien(string name)
         {
@@ -28,7 +38,8 @@ namespace BlazorAppQLDT.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<SinhvienCD15Model>>> GetSinhvienDetail()
         {
-            var resutl = _context.DataCD15.ToList();
+            
+            var resutl = await _context.DataCD15.ToListAsync();
             return Ok(resutl);
         }
         [HttpPost]

@@ -1,0 +1,54 @@
+﻿<h3>SendZNS</h3>
+@*<button class="btn btn-dark" @onclick="sendzns">send</button>*@
+@code {
+    //void SendZNS()
+    //{
+    //    ApplicationConfig config = reposity.GetApplicationConfig();
+    //    ZaloZNSClient client = new ZaloZNSClient(config.AccessToken);
+    //    string sResult = await client.GetMessageQuota();
+    //    MessageQuota messageQuota = JsonConvert.DeserializeObject<MessageQuota>(sResult);
+    //    foreach (var t in trungtuyenList)
+    //    {
+    //        if (messageQuota.data != null)
+    //        {
+    //            if (t.Status == 0 && messageQuota.data.remainingQuota > 0)
+    //            {
+    //                XNTS xnts = new XNTS();
+    //                xnts.truong_hoc = t.Truong;
+    //                xnts.MaHoSo = t.Id.ToString() + "A" + t.Sodienthoai;
+    //                xnts.customer_name = t.Hoten;
+    //                PayLoad payLoad = new PayLoad();
+    //                payLoad.template_data = xnts;
+    //                payLoad.phone = t.Sodienthoai;
+    //                payLoad.template_id = "224730";
+    //                payLoad.tracking_id = t.Id.ToString() + "A" + t.Sodienthoai;
+    //                string payload = JsonConvert.SerializeObject(payLoad);
+    //                string sendstatus = await client.SendZNS(payload);
+    //                SendZNSStatus sendZNSStatus = JsonConvert.DeserializeObject<SendZNSStatus>(sendstatus);
+    //                if (sendZNSStatus.error == 0)
+    //                {
+    //                    reposity.UpdateStatus(t.Id, 1);
+    //                }
+    //                else
+    //                {
+    //                    reposity.UpdateStatus(t.Id, sendZNSStatus.error);
+    //                }
+
+    //            }
+    //            if (messageQuota.data.remainingQuota == 0)
+    //            {
+    //                MessageBox.Show("Out of Quota");
+    //                break;
+    //            }
+    //        }
+    //        string v = await client.GetMessageQuota();
+    //        sResult = v;
+    //        messageQuota = JsonConvert.DeserializeObject<MessageQuota>(sResult);
+    //        this.view.Quota = "Quota:" + messageQuota.data.remainingQuota.ToString();
+    //        config = reposity.GetApplicationConfig();
+    //    }
+    //    LoadCurrentQuotaAsync();
+    //    trungtuyenList = (reposity.GetAll());
+    //    trungtuyensBindingSource.DataSource = trungtuyenList;
+    //}
+}

@@ -17,11 +17,8 @@ namespace BlazorAppQLDT.Shared
         public string Tinh { get; set; } = String.Empty;
         [Required]
         public string HoTen { get; set; } = String.Empty;
-        [Required]
-        public int? NgaySinh { get; set; }
-        [Required]
+        public int? NgaySinh { get; set; } 
         public int? ThangSinh { get; set; }
-        [Required]
         public int? NamSinh { get; set; }
         [Required]
         public string IdNumber { get; set; } = String.Empty;
@@ -33,7 +30,6 @@ namespace BlazorAppQLDT.Shared
         public string SoDienThoai { get; set; } = String.Empty;
         [Required]
         public int? Status { get; set; }
-        [Required]
         public DateTime? UpdatedDateTime { get; set; }
         [Required]
         public string ResponseStatus { get; set; } = String.Empty;
