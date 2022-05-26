@@ -9,7 +9,9 @@
 
 <PageTitle>FAQ</PageTitle>
 
-    <h3>FAQ</h3>
+<h3>FAQ</h3>
+<button class="btn btn-primary" @onclick="CreateNewFAQ">Create New FAQ</button>
+<br />
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -35,13 +37,14 @@
        }
     </tbody>
 </table>
-<button class="btn btn-primary" @onclick="CreateNewFAQ">Create FAQ</button>
+
 
 @code {
     protected override async Task OnInitializedAsync()
     {
         await FAQAppService.GetFAQApps();
     }
+ 
     void ShowFAQ(int id)
     {
         NavigationManager.NavigateTo($"faq/{id}");
@@ -50,4 +53,5 @@
     {
         NavigationManager.NavigateTo($"faq");
     }
+    
 }

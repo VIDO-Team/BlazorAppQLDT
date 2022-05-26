@@ -6,7 +6,7 @@ namespace BlazorAppQLDT.Client.Services.FAQAppService
     {
         private readonly HttpClient _http;
         private readonly NavigationManager _navigationManager;
-        public List<FAQApp> FAQApps { get; set; } = new List<FAQApp>();
+        public List<FAQAppModel> FAQApps { get; set; } = new List<FAQAppModel>();
         public FAQAppService(HttpClient http , NavigationManager navigationManager)
         {
             _http = http;
@@ -14,11 +14,46 @@ namespace BlazorAppQLDT.Client.Services.FAQAppService
         }
         public async Task GetFAQApps()
         {
-            var result = await _http.GetFromJsonAsync<List<FAQApp>>("api/faqapp");
+            var result = await _http.GetFromJsonAsync<List<FAQAppModel>>("api/faqapp");
             if(result != null)
             {
                 FAQApps = result;
             }
+        }
+
+        public async Task<FAQAppModel> GetSingleFAQ(int id)
+        {
+            var result = await _http.GetFromJsonAsync<FAQAppModel>($"api/faqapp/{id}");
+            //Console.WriteLine(result.ToString());
+            if (result != null)
+                return result;
+            throw new Exception("Error not found.");
+        }
+
+        public async Task  UpdateFAQ(FAQAppModel faq)
+        {
+            var result = await _http.PutAsJsonAsync($"api/faqapp/{faq.QuestionId}", faq);
+            //var response = await result.Content.ReadFromJsonAsync<List<SuperHero>>();
+            await SetFAQs(result);
+        }
+
+        public async Task CreateFAQ(FAQAppModel faq)
+        {
+            var result = await _http.PostAsJsonAsync("api/faqapp", faq);
+            await SetFAQs(result);
+        }
+
+        private async Task SetFAQs(HttpResponseMessage result)
+        {
+            //var response = await result.Content.ReadFromJsonAsync<List<SuperHero>>();
+            //Heroes = response;
+            _navigationManager.NavigateTo("faqapps");
+        }
+
+        public async Task DeleteFAQ(int id)
+        {
+            var result = await _http.DeleteAsync($"api/faqapp/{id}");
+            await SetFAQs(result);
         }
     }
 }

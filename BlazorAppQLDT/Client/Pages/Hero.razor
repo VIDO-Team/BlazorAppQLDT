@@ -56,7 +56,7 @@ else
         btnDelete = Id == null ? "Cancel" : "Delete Hero";
         await SuperHeroService.GetComics();
     }
-    protected override async Task OnParametersSetAsync()
+     protected override async Task OnParametersSetAsync()
     {
         if(Id == null)
         {
@@ -84,6 +84,6 @@ else
         if(Id != null)
             await SuperHeroService.DeleteHero(hero.Id);
         NavigationManager.NavigateTo("/superheroes");
-    }
+    } 
 
 }

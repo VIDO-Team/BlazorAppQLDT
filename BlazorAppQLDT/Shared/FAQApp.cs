@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlazorAppQLDT.Shared
 {
-    public class FAQApp
+    public class FAQAppModel
     {
         public int Id {get; set;}
         public int QuestionId { get; set; }
