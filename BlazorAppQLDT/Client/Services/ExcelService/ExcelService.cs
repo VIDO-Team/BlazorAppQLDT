@@ -20,6 +20,12 @@ namespace BlazorAppQLDT.Client.Services.ExcelService
         public List<SinhvienModel> Excelservices { get; set; } = new List<SinhvienModel>();
         public List<SinhvienCD18Model> ExcelforCD18services { get; set; } = new List<SinhvienCD18Model>();
 
+        public async Task CreateExcelCD15Detail(SinhvienCD15Model student)
+        {
+            var result = await _http.PostAsJsonAsync("api/sinhvienCD15", student);
+            await SetSinhvienCD18(result);
+        }
+
         public async Task CreateExcelCD18Detail(SinhvienCD18Model student)
         {
             var result = await _http.PostAsJsonAsync("api/sinhvienCD18", student);

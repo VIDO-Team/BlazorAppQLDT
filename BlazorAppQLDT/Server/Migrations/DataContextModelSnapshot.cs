@@ -22,7 +22,7 @@ namespace BlazorAppQLDT.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("BlazorAppQLDT.Shared.SinhvienCD18Model", b =>
+            modelBuilder.Entity("BlazorAppQLDT.Shared.SinhvienCD15Model", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,7 +30,7 @@ namespace BlazorAppQLDT.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Hoten")
+                    b.Property<string>("HoTen")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -42,15 +42,19 @@ namespace BlazorAppQLDT.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Namsinh")
+                    b.Property<int?>("NamSinh")
                         .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<int?>("Ngaysinh")
+                    b.Property<int?>("NgaySinh")
                         .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<string>("Sodienthoai")
+                    b.Property<string>("ResponseStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SoDienThoai")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -58,7 +62,7 @@ namespace BlazorAppQLDT.Server.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<int?>("Thangsinh")
+                    b.Property<int?>("ThangSinh")
                         .IsRequired()
                         .HasColumnType("int");
 
@@ -70,12 +74,14 @@ namespace BlazorAppQLDT.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("UpdatedDateTime")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
-                    b.ToTable("SinhvienCD18");
+                    b.ToTable("DataCD15");
                 });
-
-            
 #pragma warning restore 612, 618
         }
     }

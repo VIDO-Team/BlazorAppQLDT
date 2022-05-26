@@ -7,5 +7,6 @@
         Task GetExcelDetail();
         Task CreateExcelCD18Detail(SinhvienCD18Model student);
         Task GetExcelCD18Detail();
+        Task CreateExcelCD15Detail(SinhvienCD15Model student);
     }
 }

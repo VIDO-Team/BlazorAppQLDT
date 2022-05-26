@@ -47,7 +47,7 @@ namespace BlazorAppQLDT.Server.Controllers
                 .FirstOrDefaultAsync(sh => sh.Id == id);
             if (dbStudent == null)
                 return NotFound("Sorry, but no hero for you. :/");
-
+            dbStudent.Tinh = student.Tinh;
             dbStudent.Hoten = student.Hoten;
             dbStudent.Ngaysinh = student.Ngaysinh;
             dbStudent.Thangsinh = student.Thangsinh;
