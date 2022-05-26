@@ -9,5 +9,8 @@
         Task SearchSinhvien(string name);
         Task DeleteSinhvien(int id);
         Task<SinhvienCD15Model> GetSingleSinhvien(int id);
+        Task<string> GetMessageQuota();
+        Task<string> SendZNS(string payload);
+        Task GetApplicationConfig();
     }
 }
