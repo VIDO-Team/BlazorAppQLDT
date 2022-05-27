@@ -1,4 +1,5 @@
-﻿namespace BlazorAppQLDT.Client.Services.SinhvienCD15Service
+﻿using BlazorAppQLDT.Server.Views.PageList;
+namespace BlazorAppQLDT.Client.Services.SinhvienCD15Services
 {
     public interface ISinhvienCD15Service
     {
@@ -11,6 +12,8 @@
         Task DeleteSinhvien(int id);
         Task<SinhvienCD15Model> GetSingleSinhvien(int id);
         Task<string> SendZNS(string payload);
+        Task buildZNS();
         Task GetApplicationConfig();
+        
     }
 }

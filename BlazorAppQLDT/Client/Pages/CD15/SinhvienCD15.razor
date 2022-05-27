@@ -147,66 +147,8 @@
     }
     async Task sendZNS()
     {
-        await _sinhvienCD15Service.GetApplicationConfig();
-        foreach (var t in _sinhvienCD15Service.Sinhvienservices)
-        {
-            if (t.Status == 0)
-            {
-                XNTS xnts = new XNTS();
-                xnts.truong_hoc = t.Truong;
-                xnts.MaHoSo = t.Id.ToString() + "A" + t.SoDienThoai;
-                xnts.customer_name = t.HoTen;
-                PayLoad payLoad = new PayLoad();
-                payLoad.template_data = xnts;
-                payLoad.phone = t.SoDienThoai;
-                payLoad.template_id = "224730";
-                payLoad.tracking_id = t.Id.ToString() + "A" + t.SoDienThoai;
-                string payload = JsonConvert.SerializeObject(payLoad);
-                string sendstatus = await _sinhvienCD15Service.SendZNS(payload);
-                SendZNSStatus sendZNSStatus = JsonConvert.DeserializeObject<SendZNSStatus>(sendstatus);  
-            }
-        }
+        await _sinhvienCD15Service.buildZNS();
     }
-    public class Quota
-    {
-        public int remainingQuota { get; set; }
-        public int dailyQuota { get; set; }
-    }
-
-    public class MessageQuota
-    {
-        public Quota Datas { get; set; }
-        public int error { get; set; }
-        public string message { get; set; }
-    }
-
-    public class SendStatus
-    {
-        public string msg_id { get; set; }
-        public string sent_time { get; set; }
-        public Quota quota { get; set; }
-    }
-
-    public class SendZNSStatus
-    {
-        public int error { get; set; }
-        public string message { get; set; }
-        public SendStatus data { get; set; }
-    }
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-    public class XNTS
-    {
-        public string truong_hoc { get; set; }
-        public string MaHoSo { get; set; }
-        public string customer_name { get; set; }
-    }
-
-    public class PayLoad
-    {
-        public string phone { get; set; }
-        public string template_id { get; set; }
-        public XNTS template_data { get; set; }
-        public string tracking_id { get; set; }
-    }
+    
 }
 

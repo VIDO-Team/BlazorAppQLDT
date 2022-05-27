@@ -1,6 +1,8 @@
 ﻿using System.Text;
+using BlazorAppQLDT.Server.Views.PageList;
 using Microsoft.AspNetCore.Components;
-namespace BlazorAppQLDT.Client.Services.SinhvienCD15Service
+using Newtonsoft.Json;
+namespace BlazorAppQLDT.Client.Services.SinhvienCD15Services
 {
     public class SinhvienCD15Service : ISinhvienCD15Service
     {
@@ -76,24 +78,30 @@ namespace BlazorAppQLDT.Client.Services.SinhvienCD15Service
             Console.WriteLine(payload);
             return payload;
             //return await zaloZNS.SendZNS(payload);
-
-            /*
-            {
-                "phone": "84987654321",
-                "template_id": "7895417a7d3f9461cd2e",
-                "template_data": {
-                    "ky": "1",
-                    "thang": "4/2020",
-                    "start_date": "20/03/2020",
-                    "end_date": "20/04/2020",
-                    "customer": "Nguyễn Thị Hoàng Anh",
-                    "cid": "PE010299485",
-                    "address": "VNG Campus, TP.HCM",
-                    "amount": "100",
-                    "total": "100000",
-                 },
-                "tracking_id":"tracking_id"
-            } */
         }
+        public async Task buildZNS()
+        {
+            ZaloZNSClient zaloZNS = new ZaloZNSClient(ApplicationConfigservices.AccessToken);
+            _http.DefaultRequestHeaders.Add("access_token", zaloZNS.AccessToken);
+            foreach (var t in Sinhvienservices)
+            {
+                if (t.Status == 0)
+                {
+                    XNTS xnts = new XNTS();
+                    xnts.truong_hoc = t.Truong;
+                    xnts.MaHoSo = t.Id.ToString() + "A" + t.SoDienThoai;
+                    xnts.customer_name = t.HoTen;
+                    PayLoad payLoad = new PayLoad();
+                    payLoad.template_data = xnts;
+                    payLoad.phone = t.SoDienThoai;
+                    payLoad.template_id = "224730";
+                    payLoad.tracking_id = t.Id.ToString() + "A" + t.SoDienThoai;
+                    string payload = JsonConvert.SerializeObject(payLoad);
+                    SendZNS(payload);
+                    //SendZNSStatus sendZNSStatus = JsonConvert.DeserializeObject<SendZNSStatus>(sendstatus);
+                }
+            }
+        }
+        
     }
 }

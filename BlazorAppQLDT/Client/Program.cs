@@ -1,7 +1,7 @@
 global using BlazorAppQLDT.Client.Services.SuperHeroService;
 global using BlazorAppQLDT.Client.Services.SinhvienService;
 global using BlazorAppQLDT.Client.Services.SinhvienCD18Service;
-global using BlazorAppQLDT.Client.Services.SinhvienCD15Service;
+global using BlazorAppQLDT.Client.Services.SinhvienCD15Services;
 global using BlazorAppQLDT.Client.Services.ExcelService;
 global using BlazorAppQLDT.Shared;
 global using System.Net.Http.Json;

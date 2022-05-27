@@ -7,6 +7,47 @@ using ZaloDotNetSDK;
 
 namespace BlazorAppQLDT.Shared
 {
+    public class Quota
+    {
+        public int remainingQuota { get; set; }
+        public int dailyQuota { get; set; }
+    }
+
+    public class MessageQuota
+    {
+        public Quota Datas { get; set; }
+        public int error { get; set; }
+        public string message { get; set; }
+    }
+
+    public class SendStatus
+    {
+        public string msg_id { get; set; }
+        public string sent_time { get; set; }
+        public Quota quota { get; set; }
+    }
+
+    public class SendZNSStatus
+    {
+        public int error { get; set; }
+        public string message { get; set; }
+        public SendStatus data { get; set; }
+    }
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+    public class XNTS
+    {
+        public string truong_hoc { get; set; }
+        public string MaHoSo { get; set; }
+        public string customer_name { get; set; }
+    }
+
+    public class PayLoad
+    {
+        public string phone { get; set; }
+        public string template_id { get; set; }
+        public XNTS template_data { get; set; }
+        public string tracking_id { get; set; }
+    }
     public class ZaloZNSClient:ZaloBaseClient
     {
         public string AccessToken { get; set; }
