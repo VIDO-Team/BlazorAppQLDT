@@ -8,13 +8,13 @@
 @using BlazorAppQLDT.Client.Services.ExcelService
 @using System.Net.Http.Headers
 @using System.Linq
+@using Newtonsoft.Json;
 @inject HttpClient _Http
 @inject ISinhvienService SinhvienServices
 @inject IExcelService ExcelServices
 @inject NavigationManager NavigationManager
 <h3>Sinh vien</h3>  
 <button class="btn btn-primary" @onclick="CreateAndEditSinhvien">Add sinh vien</button>
-
 <p>
     <button onclick="document.getElementById('import').click()">Import</button>
     <InputFile id="import" OnChange="@ImportExcelFile" hidden mutiple></InputFile>
@@ -133,5 +133,4 @@
         }
 
 }
-    
 }

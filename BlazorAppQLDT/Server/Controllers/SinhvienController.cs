@@ -30,6 +30,16 @@ namespace BlazorAppQLDT.Server.Controllers
             var resutl = _context.Sinhviens.ToList();
             return Ok(resutl);
         }
+        [HttpGet("applicationconfig")]
+        public async Task<ActionResult<List<ApplicationConfig>>> GetKey()
+        {
+            var resutl = _context.ApplicationConfigs.FirstOrDefault(a => a.Id >= 1);
+            if (resutl.LastUpdatedDateTime.AddMinutes(-50) > DateTime.Now)
+            {
+                return null;
+            }
+            return Ok(resutl);
+        }
         [HttpGet("search/{name}")]
         public async Task<ActionResult<List<SinhvienModel>>> SearchSinhvien(string name)
         {

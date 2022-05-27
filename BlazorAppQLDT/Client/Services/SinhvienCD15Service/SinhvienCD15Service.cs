@@ -7,7 +7,7 @@ namespace BlazorAppQLDT.Client.Services.SinhvienCD15Service
         public readonly HttpClient _http;
         private readonly NavigationManager _navigationManager;
         public List<SinhvienCD15Model> Sinhvienservices { get; set; } = new List<SinhvienCD15Model>();
-        public List<ApplicationConfig> ApplicationConfigservices { get; set; } = new List<ApplicationConfig>();
+        public ApplicationConfig ApplicationConfigservices { get; set; } = new ApplicationConfig();
         public SinhvienCD15Service(HttpClient http, NavigationManager navigationManager)
         {
             _http = http;
@@ -62,28 +62,20 @@ namespace BlazorAppQLDT.Client.Services.SinhvienCD15Service
 
         public async Task GetApplicationConfig()
         {
-            var resutl = await _http.GetFromJsonAsync<List<ApplicationConfig>>("api/sinhvienCD15/applicationconfig");
+            var resutl = await _http.GetFromJsonAsync<ApplicationConfig>("api/sinhvienCD15/applicationconfig");
             if (resutl != null)
             {
                 ApplicationConfigservices = resutl;
             }
         }
-        public async Task<string> GetMessageQuota()
-        {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage httpResponse = client.GetAsync("https://business.openapi.zalo.me/message/quota").GetAwaiter().GetResult();
-            httpResponse.EnsureSuccessStatusCode();
-            string responseString = await httpResponse.Content.ReadAsStringAsync();
-            return responseString;
-        }
+        
         public async Task<string> SendZNS(string payload)
         {
-            HttpClient client = new HttpClient();
-            HttpContent c = new StringContent(payload, Encoding.UTF8, "application/json");
-            HttpResponseMessage httpResponse = client.PostAsync("https://business.openapi.zalo.me/message/template", c).GetAwaiter().GetResult();
-            httpResponse.EnsureSuccessStatusCode();
-            string responseString = await httpResponse.Content.ReadAsStringAsync();
-            return responseString;
+            ZaloZNSClient zaloZNS = new ZaloZNSClient(ApplicationConfigservices.AccessToken);
+            _http.DefaultRequestHeaders.Add("access_token", zaloZNS.AccessToken);
+            Console.WriteLine(payload);
+            return payload;
+            //return await zaloZNS.SendZNS(payload);
 
             /*
             {
@@ -103,7 +95,5 @@ namespace BlazorAppQLDT.Client.Services.SinhvienCD15Service
                 "tracking_id":"tracking_id"
             } */
         }
-
-        
     }
 }

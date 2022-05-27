@@ -148,8 +148,6 @@
     async Task sendZNS()
     {
         await _sinhvienCD15Service.GetApplicationConfig();
-        string sResult = await _sinhvienCD15Service.GetMessageQuota();
-        MessageQuota messagequota = JsonConvert.DeserializeObject<MessageQuota>(sResult);
         foreach (var t in _sinhvienCD15Service.Sinhvienservices)
         {
             if (t.Status == 0)
@@ -165,28 +163,10 @@
                 payLoad.tracking_id = t.Id.ToString() + "A" + t.SoDienThoai;
                 string payload = JsonConvert.SerializeObject(payLoad);
                 string sendstatus = await _sinhvienCD15Service.SendZNS(payload);
-                SendZNSStatus sendZNSStatus = JsonConvert.DeserializeObject<SendZNSStatus>(sendstatus);
-                if (sendZNSStatus.error == 1)
-                {
-                    break;
-                }
+                SendZNSStatus sendZNSStatus = JsonConvert.DeserializeObject<SendZNSStatus>(sendstatus);  
             }
-            string v = await _sinhvienCD15Service.GetMessageQuota();
-            sResult = v;
-            messagequota = JsonConvert.DeserializeObject<MessageQuota>(sResult);
-            //this.view.Quota = "Quota:" + MessageQuota.Datas.remainingQuota.ToString();
-            var config = _sinhvienCD15Service.GetApplicationConfig();
         }
-        //LoadCurrentQuotaAsync();
     }
-    //private async Task LoadCurrentQuotaAsync()
-    //    {
-    //        ApplicationConfig config = reposity.GetApplicationConfig();
-    //        ZaloZNSClient client = new ZaloZNSClient(config.AccessToken);
-    //        string sResult = await client.GetMessageQuota();
-    //        MessageQuota messageQuota = JsonConvert.DeserializeObject<MessageQuota>(sResult);
-    //        this.view.Quota = "Quota:" + messageQuota.data.remainingQuota.ToString();
-    //    }
     public class Quota
     {
         public int remainingQuota { get; set; }

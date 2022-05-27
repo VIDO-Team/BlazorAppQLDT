@@ -8,21 +8,40 @@ namespace BlazorAppQLDT.Server.Controllers
     public class SinhvienCD18Controller : ControllerBase
     {
         private readonly DataContext _context;
-        private readonly IWebHostEnvironment env;
-        private readonly ILogger<SinhvienController> logger;
         public SinhvienCD18Controller(DataContext context)
         {
             _context = context;
         }
-
+        [HttpGet("search/{name}")]
+        public async Task<ActionResult<List<SinhvienCD18Model>>> SearchSinhvien(string name)
+        {
+            var resutl = await _context.SinhvienCD18.Where(s => s.Hoten.ToLower().Contains(name.ToLower())).ToListAsync();
+            return Ok(resutl);
+        }
+        [HttpGet("search")]
+        public async Task<ActionResult<List<SinhvienCD18Model>>> SearchNull()
+        {
+            var resutl = _context.SinhvienCD18.ToList();
+            return Ok(resutl);
+        }
+        [HttpGet("applicationconfig")]
+        public async Task<ActionResult<List<ApplicationConfig>>> GetKey()
+        {
+            var resutl = _context.ApplicationConfigs.FirstOrDefault(a => a.Id >= 1);
+            if (resutl.LastUpdatedDateTime.AddMinutes(-50) > DateTime.Now)
+            {
+                return null;
+            }
+            return Ok(resutl);
+        }
         [HttpGet]
-        public async Task<ActionResult<List<SinhvienModel>>> GetSinhvienDetail()
+        public async Task<ActionResult<List<SinhvienCD18Model>>> GetSinhvienDetail()
         {
             var resutl = _context.SinhvienCD18.ToList();
             return Ok(resutl);
         }
         [HttpPost]
-        public async Task<ActionResult<List<SinhvienModel>>> CreateSinhVien(SinhvienCD18Model student)
+        public async Task<ActionResult<List<SinhvienCD18Model>>> CreateSinhVien(SinhvienCD18Model student)
         {
             _context.SinhvienCD18.Add(student);
             await _context.SaveChangesAsync();
