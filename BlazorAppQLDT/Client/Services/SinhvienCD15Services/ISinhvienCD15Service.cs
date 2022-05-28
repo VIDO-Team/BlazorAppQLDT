@@ -1,4 +1,4 @@
-﻿using BlazorAppQLDT.Server.Views.PageList;
+﻿
 namespace BlazorAppQLDT.Client.Services.SinhvienCD15Services
 {
     public interface ISinhvienCD15Service

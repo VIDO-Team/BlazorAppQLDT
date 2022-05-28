@@ -9,12 +9,12 @@ namespace BlazorAppQLDT.Shared
     public class PagingLink
     {
         public string Text { get; set; }
-        public int Page { get; set; }
+        public int PageIndex { get; set; }
         public bool Enabled { get; set; }
         public bool Active { get; set; }
-        public PagingLink(int page, bool enabled, string text)
+        public PagingLink(int pageindex, bool enabled, string text)
         {
-            Page = page;
+            PageIndex = pageindex;
             Enabled = enabled;
             Text = text;
         }

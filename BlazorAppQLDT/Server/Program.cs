@@ -30,6 +30,14 @@ builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "QLDT", Version = "v1" });
 });
 builder.Services.AddHttpClient();
+builder.Services.AddCors(policy =>
+{
+    policy.AddPolicy("CorsPolicy", opt => opt
+    .AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .WithExposedHeaders("X-Pagination"));
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

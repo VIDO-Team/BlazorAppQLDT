@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using BlazorAppQLDT.Server.Views.PageList;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 namespace BlazorAppQLDT.Client.Services.SinhvienCD15Services

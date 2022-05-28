@@ -1,0 +1,83 @@
+﻿<div class="p-xl-2">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @foreach (var pageItem in pageItems)
+            {
+                <li @onclick="@(() => SelectCurrentPage(pageItem))"
+                    style="cursor:pointer"
+                    class="page-item
+                @(pageItem.Active ? "active" : null)
+                @(pageItem.Enabled ? null : "disabled")">
+                    <span class="page-link" href="#">@pageItem.Text</span>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+@code {
+    private List<PagingLink> pageItems;
+
+    [Parameter]
+    public int PageIndex { get; set; }
+    [Parameter]
+    public int TotalPages { get; set; }
+    [Parameter]
+    public int Radius { get; set; }
+    [Parameter]
+    public EventCallback<int> OnSelectedPage { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        CreatePages();
+    }
+
+    private void CreatePages()
+    {
+        pageItems = new List<PagingLink>();
+
+        var hasFirstPage = PageIndex > 1;
+        var FirstPageIndex = 1 ;
+        pageItems.Add(new PagingLink(FirstPageIndex, hasFirstPage, "First"));
+
+        var hasPreviosPage = PageIndex > 1;
+        var previousPageIndex = PageIndex - 1;
+        pageItems.Add(new PagingLink(previousPageIndex, hasPreviosPage, "Prev"));
+
+        if (Radius >= TotalPages)
+            Radius = TotalPages - 1;
+
+        for (int i = 1; i <= TotalPages; i++)
+        {
+            if (i >= PageIndex - Radius && i < PageIndex + Radius)
+            {
+                pageItems.Add(new PagingLink(i, true, i.ToString())
+                {
+                    Active = PageIndex == i
+                });
+            }
+        }
+
+        var hasNextPage = PageIndex < TotalPages;
+        var nextPageIndex = PageIndex + 1;
+        pageItems.Add(new PagingLink(nextPageIndex, hasNextPage, "Next"));
+
+        var hasLastPage = PageIndex <= TotalPages;
+        var LastPageIndex = PageIndex = TotalPages;
+        pageItems.Add(new PagingLink(LastPageIndex, hasLastPage, "Last"));
+
+        
+    }
+
+    private async Task SelectCurrentPage(PagingLink pageItem)
+    {
+
+        if (!pageItem.Enabled)
+        {
+            return;
+        }
+
+        PageIndex = pageItem.PageIndex;
+        await OnSelectedPage.InvokeAsync(pageItem.PageIndex);
+    }
+}

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using BlazorAppQLDT.Server.Paging;
 using Newtonsoft.Json;
 namespace BlazorAppQLDT.Server.Controllers
 {
@@ -10,18 +8,11 @@ namespace BlazorAppQLDT.Server.Controllers
     public class SinhvienCD15Controller : ControllerBase
     {
         private readonly DataContext _context;
-        private readonly SinhvienPaging _repo;
         public SinhvienCD15Controller(DataContext context)
         {
             _context = context;
         }
-        [HttpGet("paging")]
-        public async Task<IActionResult> Get([FromQuery] SinhvienParameter sinhvienParameters)
-        {
-            var products = await _repo.GetProducts(sinhvienParameters);
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(products.MetaData));
-            return Ok(products);
-        }
+        
         //get Key
         [HttpGet("applicationconfig")]
         public async Task<ActionResult<List<ApplicationConfig>>> GetKey()
