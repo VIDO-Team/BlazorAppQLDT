@@ -22,15 +22,18 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var faq in FAQAppService.FAQApps)
+        @foreach (var question in FAQAppService.FQADetails)
        {
            <tr>
-               <td>@faq.QuestionId</td>
-               <td>@faq.Question</td>
-               <td>@faq.Answers</td>
+               <td>@question.Id</td>
+               <td>@question.Question</td>
+               <td>@question.FQA.Answers</td>
                <td>
-                   <button class = "btn btn-primary" @onclick="(() => ShowFAQ(faq.QuestionId))">
+                   <button class = "btn btn-warning" @onclick="(() => ShowFAQ(question.Id))">
                        <i class="oi oi-pencil"></i>
+                   </button>
+                   <button class = "btn btn-success" @onclick="(() => AddQuestion(question.FQAId))">
+                       <i class="oi oi-plus"></i>
                    </button>
                </td>
            </tr>
@@ -42,16 +45,20 @@
 @code {
     protected override async Task OnInitializedAsync()
     {
-        await FAQAppService.GetFAQApps();
+        await FAQAppService.GetQuestions();
     }
  
     void ShowFAQ(int id)
     {
-        NavigationManager.NavigateTo($"faq/{id}");
+        NavigationManager.NavigateTo($"editquestion/{id}");
     }
     void CreateNewFAQ()
     {
-        NavigationManager.NavigateTo($"faq");
+        NavigationManager.NavigateTo($"createfqa");
+    }
+    void AddQuestion(int id)
+    {
+        NavigationManager.NavigateTo($"addquestion/{id}");      
     }
     
 }

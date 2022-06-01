@@ -19,6 +19,8 @@
         }
         public DbSet<SuperHero> SuperHeroes { get; set; }
         public DbSet<Comic> Comics { get; set; }
-        public DbSet<FAQAppModel> FAQApps { get; set; }
+        public DbSet<FAQAppModel> FAQApp { get; set; }
+        public DbSet<QuestionModel> FQADetails { get; set; }
+        public DbSet<AnswersModel> FQA { get; set; }
     }
 }

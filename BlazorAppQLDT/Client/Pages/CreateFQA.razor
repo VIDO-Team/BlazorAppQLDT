@@ -1,0 +1,56 @@
+@page "/createfqa"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using BlazorAppQLDT.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject IFAQAppService FAQAppService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create FAQ</PageTitle>
+<h3>Create FAQ </h3>   
+
+<EditForm Model="question" OnSubmit="HandelSubmit">
+                    <div>
+                        <label for="question">Question</label>
+                        <InputTextArea rows="10" id="question" @bind-Value="question.Question" class="form-control"></InputTextArea>
+                    </div>
+                    <div>
+                        <label for="questiontype">QuestionType</label><br />
+                            <InputSelect @bind-Value="question.QuestionType" class="form-select">
+                                <option>Please Select</option>
+                                <option value="0">Equals</option>
+                                <option value="1">Start With</option>
+                                <option value="2">Contains</option>
+                            </InputSelect>        
+                    </div>
+                    <div>
+                        <label for="answers">Answers</label>
+                        <InputTextArea rows="10" id="answers" @bind-Value="question.FQA.Answers" class="form-control"></InputTextArea>
+                    </div>
+                    <div>
+                        <label for="answerstype">Answers Type</label>
+                        <InputText id="answerstype" @bind-Value="question.FQA.Type" class="form-control"></InputText>
+                    </div>
+                    <br />
+                    <button type="submit" class="btn btn-primary">Add Question</button>
+                    <button type="button" class="btn btn-secondary" @onclick="Back">Back</button>
+                </EditForm>
+
+@code
+{
+
+    @* FAQAppModel faq = new FAQAppModel(); *@
+    QuestionModel question = new QuestionModel {FQA = new AnswersModel()};
+
+    async Task HandelSubmit()
+    {
+        await FAQAppService.CreateFQA(question);
+    }
+
+    async Task Back()
+    {
+        NavigationManager.NavigateTo("/faqapps");
+    }
+
+}

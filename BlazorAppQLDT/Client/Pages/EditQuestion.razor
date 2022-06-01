@@ -1,0 +1,71 @@
+@page "/editquestion/{id:int}"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using BlazorAppQLDT.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject IFAQAppService FAQAppService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit FAQ</PageTitle>
+<h3>Edit FAQ </h3>    
+
+<EditForm Model="question" OnSubmit="HandelSubmit">
+    
+    <div>
+        <label for="question">Question</label>
+        <InputTextArea rows="10" id="question" @bind-Value="question.Question" class="form-control"></InputTextArea>
+    </div>
+    <div>
+        <label for="questiontype">QuestionType</label><br />
+            <InputSelect @bind-Value="question.QuestionType" class="form-select">
+                <option value="0">Equals</option>
+                <option value="1">Start With</option>
+                <option value="2">Contains</option>
+            </InputSelect>        
+    </div>
+    <div>
+        <label for="answers">Answers</label>
+        <InputTextArea rows="10" id="answers" @bind-Value="question.FQA.Answers" class="form-control" readonly></InputTextArea>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Edit</button>
+    <button type="button" class="btn btn-danger" @onclick="DeleteQuestion">Delete</button>
+    <button type="button" class="btn btn-secondary" @onclick="Back">Back</button>
+</EditForm>
+
+@code
+{
+    [Parameter]
+    public int? Id { get; set; }
+
+    @* FAQAppModel faq = new FAQAppModel(); *@
+    QuestionModel question = new QuestionModel {FQA = new AnswersModel()};
+    protected override async Task OnInitializedAsync()
+    {
+        await FAQAppService.GetAnswers();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        question = await FAQAppService.GetSingleQuestion((int)Id);
+    }
+
+    async Task HandelSubmit()
+    {
+        await FAQAppService.UpdateQuestion(question);
+    }
+
+    async Task DeleteQuestion()
+    {
+        if(Id != null)
+            await FAQAppService.DeleteQuestion(question.Id);
+        NavigationManager.NavigateTo("/faqapps");
+    }
+
+    async Task Back()
+    {
+        NavigationManager.NavigateTo("/faqapps");
+    }
+
+}

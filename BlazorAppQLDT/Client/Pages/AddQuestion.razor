@@ -1,0 +1,109 @@
+@page "/addquestion/{id:int}"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using BlazorAppQLDT.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject IFAQAppService FAQAppService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Add Question</PageTitle>
+<h3>Add Question</h3>   
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+                <EditForm Model="question" OnSubmit="HandelSubmit">
+                    <div>
+                        <label for="question">Question</label>
+                        <InputTextArea rows="10" id="question" @bind-Value="question.Question" class="form-control"></InputTextArea>
+                    </div>
+                    <div>
+                        <label for="questiontype">QuestionType</label><br />
+                            <InputSelect @bind-Value="question.QuestionType" class="form-select">
+                                <option>Please Select</option>
+                                <option value="0">Equals</option>
+                                <option value="1">Start With</option>
+                                <option value="2">Contains</option>
+                            </InputSelect>        
+                    </div>
+                    <br />
+                    <button type="submit" class="btn btn-primary">Add Question</button>
+                    <button type="button" class="btn btn-secondary" @onclick="Back">Back</button>
+                </EditForm>
+            </div>
+        <div class="col">
+            <div>
+                <label for="answers">Answers</label>
+                <TextArea rows="10" id="answers" class="form-control" readonly>@question.FQA.Answers</TextArea>
+            </div>
+            <br />
+            <div style="overflow:auto; height:250px">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label for="question" class="control-label">Question</label>
+                            </th>
+                            <th>
+                                <label asp-for="questiontype" class="control-label">Question Type</label>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                @foreach (var item in FAQAppService.FQADetails)
+                {
+                <tbody>
+                    @{
+                            var s ="";
+                            if(item.QuestionType ==1){
+                                s= "Start with";
+                            }
+                            else if(item.QuestionType==0)
+                            {
+                                s= "Equal";
+                            }
+                            else if(item.QuestionType==2)
+                            {
+                                s= "Contains";
+                            }
+                        }
+                
+                    <tr>
+                        <td>
+                            @item.Question
+                        </td>
+                        <td>
+                            @s
+                        </td>
+                    </tr>
+                </tbody>
+                 }
+                </table> 
+            </div>
+        </div>
+    </div>
+</div>
+@code{
+    [Parameter]
+    public int Id { get; set; }
+    QuestionModel question = new QuestionModel {FQA = new AnswersModel()};
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var FQA = await FAQAppService.GetSingleAnswers((int)Id);
+        question.FQA.Answers = FQA.Answers;
+
+         await FAQAppService.GetQuestionByFAQId((int) Id);
+    }
+
+    async Task HandelSubmit()
+    {
+        await FAQAppService.AddQuestion(question);
+    }
+
+    async Task Back()
+    {
+        NavigationManager.NavigateTo("/faqapps");
+    }
+}
