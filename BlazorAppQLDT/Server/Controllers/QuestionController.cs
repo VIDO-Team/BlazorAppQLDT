@@ -69,7 +69,8 @@ namespace BlazorAppQLDT.Server.Controllers
         public async Task<ActionResult<QuestionModel>> AddQuestion(QuestionModel question)
         {   
             question.FQAId = question.FQA.Id;
-            await _context.FQADetails.AddAsync(question);
+            await _context.FQADetails
+            .AddAsync(question);
             await _context.SaveChangesAsync();
             return Ok(question);
         }
@@ -109,6 +110,24 @@ namespace BlazorAppQLDT.Server.Controllers
             _context.FQADetails.Remove(question);
             _context.SaveChanges();
             return Ok();
+        }
+
+        [HttpGet("search/{text}")]
+        public async Task<ActionResult<List<QuestionModel>>> SearchQuestion(string text)
+        {
+            var resutl = await _context.FQADetails
+            .Where(s => s.Question.ToLower().Contains(text.ToLower())
+            || s.FQA.Answers.ToLower().Contains(text.ToLower()))
+            .Include(q => q.FQA)
+            .ToListAsync();
+            return Ok(resutl);
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<List<QuestionModel>>> SearchNull()
+        {
+            var resutl = _context.FQADetails.Include(q => q.FQA).ToList();
+            return Ok(resutl);
         }
     }
 }

@@ -21,5 +21,6 @@ namespace BlazorAppQLDT.Client.Services.FAQAppService
         Task CreateFQA(QuestionModel question);
         Task UpdateQuestion(QuestionModel question);
         Task DeleteQuestion(int id);
+        Task SearchQuestion(string text);
     }
 }
