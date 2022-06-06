@@ -60,7 +60,7 @@
 </div>
 <br>
 <div id="searchbox">
-<input type="text" placeholder="Search..." @bind-value="searchTerm"/><button type="submit" @onclick="(()=>SearchTerm())">Search</button>
+<input type="text" placeholder="Search..." @bind-value="searchTerm"/><button class = "btn btn-success" @onclick="(()=>SearchTerm())">Search</button>
 </div>
 <br>
 <table class="table table-bordered">
@@ -126,7 +126,7 @@
             question = FAQAppService.FQADetails.Skip(skipCount).Take(itemsPerPage);
         }
     }
-
+    
     async void SearchTerm()
     {
         await FAQAppService.SearchQuestion(searchTerm);
