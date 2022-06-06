@@ -68,7 +68,6 @@ namespace BlazorAppQLDT.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<QuestionModel>> AddQuestion(QuestionModel question)
         {   
-            question.FQAId = question.FQA.Id;
             await _context.FQADetails
             .AddAsync(question);
             await _context.SaveChangesAsync();

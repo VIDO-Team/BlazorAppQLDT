@@ -30,7 +30,6 @@
     </div>
     <br />
     <button type="submit" class="btn btn-primary">Edit</button>
-    <button type="button" class="btn btn-danger" @onclick="DeleteQuestion">Delete</button>
     <button type="button" class="btn btn-secondary" @onclick="Back">Back</button>
 </EditForm>
 
@@ -54,13 +53,6 @@
     async Task HandelSubmit()
     {
         await FAQAppService.UpdateQuestion(question);
-    }
-
-    async Task DeleteQuestion()
-    {
-        if(Id != null)
-            await FAQAppService.DeleteQuestion(question.Id);
-        NavigationManager.NavigateTo("/faqapps");
     }
 
     async Task Back()
