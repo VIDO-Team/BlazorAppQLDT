@@ -35,7 +35,7 @@
         <div class="col">
             <div>
                 <label for="answers">Answers</label>
-                <TextArea rows="10" id="answers" class="form-control" readonly>@question.FQA.Answers</TextArea>
+                <TextArea rows="10" id="answers" class="form-control" readonly>@answersModel.Answers</TextArea>
             </div>
             <br />
             <div style="overflow:auto; height:250px">
@@ -88,17 +88,18 @@
     [Parameter]
     public int Id { get; set; }
     QuestionModel question = new QuestionModel {FQA = new AnswersModel()};
+    AnswersModel answersModel = new AnswersModel();
 
     protected override async Task OnParametersSetAsync()
     {
-        var FQA = await FAQAppService.GetSingleAnswers((int)Id);
-        question.FQA.Answers = FQA.Answers;
-
-         await FAQAppService.GetQuestionByFAQId((int) Id);
+        answersModel = await FAQAppService.GetSingleAnswers((int)Id);
+        question.FQAId = Id;
+        await FAQAppService.GetQuestionByFAQId((int) Id);
     }
 
     async Task HandelSubmit()
     {
+        
         await FAQAppService.AddQuestion(question);
     }
 

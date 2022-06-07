@@ -106,6 +106,7 @@ namespace BlazorAppQLDT.Client.Services.FAQAppService
 
         public async Task AddQuestion(QuestionModel question)
         {
+            question.FQA = null;
             var result = await _http.PostAsJsonAsync($"api/question/", question);
             await SetFAQs(result);
         }
