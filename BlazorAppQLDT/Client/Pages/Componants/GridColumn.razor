@@ -1,0 +1,11 @@
+
+<div>
+    <input class="form-control" placeholder="Search Filter..." @oninput="OnSearchTextChanged"/>
+</div>
+
+
+@code{
+    [Parameter]
+    public EventCallback<ChangeEventArgs> OnSearchTextChanged { get; set; }
+    
+}

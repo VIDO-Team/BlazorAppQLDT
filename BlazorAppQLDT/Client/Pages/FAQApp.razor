@@ -9,51 +9,6 @@
 @inject NavigationManager NavigationManager
 
 <PageTitle>FAQ</PageTitle>
-<style type="text/css">
-#searchbox{
-    @* margin-top: 15px; *@
-    @* float:right; *@
-    @* margin-right: 100px; *@
-    @* border: 2px solid black; *@
-    @* border-right: none; *@
-    @* border-radius: 20px 20px 20px 20px; *@
-    @* border: 0 solid black; *@
-    width: 50%
-}
-
-#searchbox input{
-    padding: 7px;
-    @* border-right: none; *@
-    border-radius: 5px 0 0 5px;
-    font-size: 18px;
-    font-family: sans-serif;
-    width: 75%;
-}
-
-#searchbox button{
-    @* float: right; *@
-    background-color: lightseagreen;
-    color: white;
-    border-radius: 0 5px 5px 0;
-    cursor: pointer;
-    @* position: relative; *@
-    padding: 7px;
-    border-left: none;
-    @* border: none; *@
-    font-family: sans-serif;
-    font-size: 18px;
-    width: 25%;
-    @* margin-left: 10px; *@
-}
-
-#searchbox button:hover{
-    opacity: .8;
-}
-
-#searchbox input:hover{
-    opacity: .8;
-}
-</style>
 <h3>FAQ</h3>
 <div>
 <BlazoredTypeahead SearchMethod="@SearchQuestion"
@@ -74,26 +29,31 @@
     </NotFoundTemplate>
 </BlazoredTypeahead>
 </div>
+
 <br>
+<GridColumn OnSearchTextChanged="OnQuestionSearchTextChanged"></GridColumn>
+<br>
+
 <div>
 <button class="btn btn-primary" @onclick="CreateNewFAQ">Create FAQ</button>
 </div>
 
-@* <div id="searchbox">
-<input type="text" placeholder="Search..." @bind-value="searchTerm"/><button class = "btn btn" @onclick="(()=>SearchTerm())">Search</button>
-</div> *@
+<div id="searchbox">
+@* <input type="text" placeholder="Search..." @bind-value="searchTerm"/><button class = "btn btn" @onclick="(()=>SearchTerm())">Search</button> *@
+</div>
 <br>
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>QuestionId</th>
-            <th>Questtion</th>
+            <th>Question</th>
             <th>Answers</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var questions in question)
+        
+        @foreach (var questions in question) 
        {
            <tr>
                <td>@questions.Id</td>
@@ -116,15 +76,28 @@
        }
     </tbody>
 </table>
+<br>
+<div>
+    <button class="btn btn-secondary" @onclick ="@(e => NavigateTo("first"))">@("<<")</button>
+    <button class="btn btn-secondary" @onclick ="@(e => NavigateTo("prev"))">@("<")</button>
+    @for (int i = 0; i < TotalPages; i++)
+    {
+        var pageNumber = i;
+        <button class="btn @(CurrentPage == pageNumber? "btn-dark":"btn-info")" 
+                @onclick="@(e => UpdateList(pageNumber))">@(i + 1)</button>
+    }
+    <button class="btn btn-secondary" @onclick ="@(e => NavigateTo("next"))">@(">")</button>
+    <button class="btn btn-secondary" @onclick ="@(e => NavigateTo("last"))">@(">>")</button>
+</div>
 
 <Confirm ConfirmationChanged="OnConfirmDeleteQuestion" @ref="DeleteConfirmation" >
 </Confirm>
 
-<Pagination TotalPages="@(totalPages != 0 ? totalPages : 1)"
+@* <Pagination TotalPages="@(totalPages != 0 ? totalPages : 1)"
             PageIndex="@pageIndex"
             Radius="3"
             OnSelectedPage="@SelectedPage">
-</Pagination>
+</Pagination> *@
 
 
 
@@ -140,20 +113,69 @@
     private int pageIndex = 1;
     private int itemsPerPage = 10;
     private int totalPages = 1;
+    
+    public int PageSize { get; set; }
+    public int TotalPages { get; set; }
+    public int CurrentPage { get; set; }
+    public bool IsGridViewFiltered { get; set; }
+    public bool ReloadList { get; set; }
+
     private int DeleteId { get; set; }
     protected BlazorAppQLDT.Componants.ConfirmBase DeleteConfirmation { get; set; }
-    public List<QuestionModel> Questions {  get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await FAQAppService.GetQuestions();
-        if(FAQAppService.FQADetails != null)
+
+        PageSize = 10;
+
+        question = FAQAppService.FQADetails.Take(PageSize).ToList();
+        TotalPages = (int)Math.Ceiling(FAQAppService.FQADetails.Count() / (decimal)PageSize);
+        
+        base.OnInitialized();
+        //pagination
+        @* if(FAQAppService.FQADetails != null)
         {
             totalPages = (int)(FAQAppService.FQADetails.Count() / itemsPerPage);
             question = FAQAppService.FQADetails.Skip(0).Take(itemsPerPage);
-        }
+        } *@
     }
-    
-    private void SelectedPage(int selectedPageIndex)
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(!firstRender && IsGridViewFiltered)
+        {
+            UpdateList();
+            IsGridViewFiltered = false;
+
+            StateHasChanged();
+        }
+        base.OnAfterRender(firstRender);
+    }
+
+    protected void UpdateList(int pageNumber = 0)
+    {
+        question = FAQAppService.FQADetails.Skip(pageNumber * PageSize).Take(PageSize).ToList();
+        TotalPages = (int)Math.Ceiling(FAQAppService.FQADetails.Count() / (decimal)PageSize);
+        CurrentPage = pageNumber;
+    }
+
+    protected void NavigateTo(string direction)
+    {
+        if(direction == "prev" && CurrentPage != 0)
+            CurrentPage -= 1;
+        if(direction == "next" && CurrentPage != TotalPages - 1)
+            CurrentPage += 1;
+        if(direction == "first")
+            CurrentPage = 0;
+        if(direction == "last")
+            CurrentPage = TotalPages - 1;
+
+        UpdateList(CurrentPage);
+    }
+
+    //pagination
+    @* private void SelectedPage(int selectedPageIndex)
     {
         if (FAQAppService.FQADetails != null)
         {
@@ -161,7 +183,7 @@
             var skipCount = itemsPerPage * (pageIndex - 1);
             question = FAQAppService.FQADetails.Skip(skipCount).Take(itemsPerPage);
         }
-    }
+    } *@
     
     @* async void SearchTerm()
     {
@@ -190,16 +212,17 @@
     {
         NavigationManager.NavigateTo($"editquestion/{id}");
     }
+
     void CreateNewFAQ()
     {
         NavigationManager.NavigateTo($"createfqa");
     }
+
     void AddQuestion(int id)
     {
         NavigationManager.NavigateTo($"addquestion/{id}");      
     }
 
-    
     protected void DeleteQuestion(int deleteId)
     {
         DeleteId = deleteId;
@@ -216,12 +239,17 @@
         }
     }
 
-
-
-    @* async Task DeleteQuestion(int id)
+    @* private async Task<List<QuestionModel>> OnQuestionSearchTextChanged(ChangeEventArgs changeEventArgs)
     {
-        if(id != null)
-            await FAQAppService.DeleteQuestion(id);
-        NavigationManager.NavigateTo("/faqapps");
+        string searchText = changeEventArgs.Value.ToString();
+        return question = await FAQAppService.SearchQuestion(searchText);
     } *@
+
+    private void OnQuestionSearchTextChanged(ChangeEventArgs changeEventArgs)
+    {
+        string searchText = changeEventArgs.Value.ToString();
+        @* IsGridViewFiltered = true; *@
+
+        question = FAQAppService.FQADetails.Where(q => q.Question.Contains(searchText) || q.FQA.Answers.Contains(searchText)).ToList();
+    }
 }
