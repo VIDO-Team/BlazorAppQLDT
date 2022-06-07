@@ -104,19 +104,30 @@ namespace BlazorAppQLDT.Server.Controllers
                 .FirstOrDefaultAsync(q => q.Id == id);
             if (question == null)
             {
-                return NotFound("Sorry no hero here");
+                return NotFound("Sorry no question here");
             }
             _context.FQADetails.Remove(question);
             _context.SaveChanges();
             return Ok();
         }
 
-        [HttpGet("search/{text}")]
-        public async Task<ActionResult<List<QuestionModel>>> SearchQuestion(string text)
+        // [HttpGet("search/{text}")]
+        // public async Task<ActionResult<List<QuestionModel>>> SearchQuestion(string text)
+        // {
+        //     var resutl = await _context.FQADetails
+        //     .Where(s => s.Question.ToLower().Contains(text.ToLower())
+        //     || s.FQA.Answers.ToLower().Contains(text.ToLower()))
+        //     .Include(q => q.FQA)
+        //     .ToListAsync();
+        //     return Ok(resutl);
+        // }
+
+        [HttpGet("search/{searchText}")]
+        public async Task<ActionResult<List<QuestionModel>>> SearchQuestion(string searchText)
         {
             var resutl = await _context.FQADetails
-            .Where(s => s.Question.ToLower().Contains(text.ToLower())
-            || s.FQA.Answers.ToLower().Contains(text.ToLower()))
+            .Where(s => s.Question.ToLower().Contains(searchText.ToLower())
+            || s.FQA.Answers.ToLower().Contains(searchText.ToLower()))
             .Include(q => q.FQA)
             .ToListAsync();
             return Ok(resutl);

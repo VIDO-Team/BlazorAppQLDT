@@ -129,13 +129,18 @@ namespace BlazorAppQLDT.Client.Services.FAQAppService
             await SetFAQs(result);
         }
 
-        public async Task SearchQuestion(string text)
+        // public async Task SearchQuestion(string text)
+        // {
+        //     var resutl = await _http.GetFromJsonAsync<List<QuestionModel>>($"api/question/search/{text}");
+        //     if (resutl != null)
+        //     {
+        //         FQADetails = resutl;
+        //     }
+        // }
+
+        public async Task<List<QuestionModel>> SearchQuestion(string searchText)
         {
-            var resutl = await _http.GetFromJsonAsync<List<QuestionModel>>($"api/question/search/{text}");
-            if (resutl != null)
-            {
-                FQADetails = resutl;
-            }
+            return await _http.GetFromJsonAsync<List<QuestionModel>> ($"api/question/search/{searchText}");
         }
 
     }
