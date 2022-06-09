@@ -78,27 +78,34 @@
 </table>
 <br>
 
-<div>
+ @* <div>
     <button class="btn btn-secondary" @onclick ="@(e => NavigateTo("first"))">@("<<")</button>
     <button class="btn btn-secondary" @onclick ="@(e => NavigateTo("prev"))">@("<")</button>
     @for (int i = 0; i < TotalPages; i++)
     {
-        var pageNumber = i;
-        <button class="btn @(CurrentPage == pageNumber? "btn-dark":"btn-info")" 
-                @onclick="@(e => UpdateList(pageNumber))">@(i + 1)</button>
+         @if(i<=5 || i>TotalPages-5){ 
+             var pageNumber = i;
+            <button class="btn @(CurrentPage == pageNumber? "btn-dark":"btn-info")" 
+                    @onclick="@(e => UpdateList(pageNumber))">@(i + 1)</button> 
+         } 
+         else{
+            var pageNumber = i;
+            <button class="btn @(CurrentPage == pageNumber? "btn-dark":"btn-info")" >...</button>
+            i=TotalPages-6;
+        } 
     }
-    <button class="btn btn-secondary" @onclick ="@(e => NavigateTo("next"))">@(">")</button>
+     <button class="btn btn-secondary" @onclick ="@(e => NavigateTo("next"))">@(">")</button>
     <button class="btn btn-secondary" @onclick ="@(e => NavigateTo("last"))">@(">>")</button>
-</div>
+</div>  *@
 
 <Confirm ConfirmationChanged="OnConfirmDeleteQuestion" @ref="DeleteConfirmation" >
 </Confirm>
 
-@* <Pagination TotalPages="@(totalPages != 0 ? totalPages : 1)"
+<Pagination TotalPages="@(totalPages != 0 ? totalPages : 1)"
             PageIndex="@pageIndex"
             Radius="3"
             OnSelectedPage="@SelectedPage">
-</Pagination> *@
+</Pagination>
 
 
 
@@ -129,16 +136,16 @@
     {
         await FAQAppService.GetQuestions();
 
-        PageSize = 5;
+        @* PageSize = 5;
 
         question = FAQAppService.FQADetails.Take(PageSize).ToList();
         TotalPages = GetTotalPage();
         
-        base.OnInitialized();
+        base.OnInitialized(); *@
 
         //pagination
-        @* question = FAQAppService.FQADetails.Take(itemsPerPage).ToList();
-        totalPages = GetTotalPage(); *@
+        question = FAQAppService.FQADetails.Take(itemsPerPage).ToList();
+        totalPages = GetTotalPage();
 
     }
 
@@ -202,14 +209,26 @@
     }
 
     //pagination
-    private void SelectedPage(int selectedPageIndex)
+    private void SelectedPage(int selectedPageIndex = 1)
     {
-        if (FAQAppService.FQADetails != null)
+        @* if (FAQAppService.FQADetails != null)
         {
             pageIndex = selectedPageIndex;
             var skipCount = itemsPerPage * (pageIndex - 1);
             question = FAQAppService.FQADetails.Skip(skipCount).Take(itemsPerPage);
+        } *@
+        pageIndex = selectedPageIndex;
+        var skipCount = itemsPerPage * (pageIndex - 1);
+        if (string.IsNullOrEmpty(searchText))
+        {
+            question = FAQAppService.FQADetails.ToList().Skip(skipCount).Take(itemsPerPage).ToList();
         }
+        else
+        {
+            question = FAQAppService.FQADetails.Where(q => q.Question.ToLower().Contains(searchText.ToLower()) || q.FQA.Answers.ToLower().Contains(searchText.ToLower())).ToList().Skip(skipCount).Take(itemsPerPage).ToList();
+        }
+
+        totalPages = GetTotalPage();
     }
     
     @* async void SearchTerm()
@@ -275,6 +294,21 @@
     async void OnQuestionSearchTextChanged(ChangeEventArgs changeEventArgs)
     {
         searchText = changeEventArgs.Value.ToString();
-        UpdateList();
+        SelectedPage();
+        @* if(string.IsNullOrEmpty(searchText))
+        {
+            question = FAQAppService.FQADetails.ToList().Skip(0).Take(itemsPerPage);
+        }
+        else
+        {
+            question = FAQAppService.FQADetails.Where(q => q.Question.ToLower().Contains(searchText.ToLower()) || q.FQA.Answers.ToLower().Contains(searchText.ToLower())).ToList().Skip(0).Take(itemsPerPage);
+        } *@
+        
+
+        @* totalPages = GetTotalPage();  *@
+        @* pageIndex = 1; *@
+        @* UpdateList(); *@
+        @* SelectedPage(pageIndex); *@
+
     }
 }
