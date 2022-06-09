@@ -62,7 +62,7 @@
         var nextPageIndex = PageIndex + 1;
         pageItems.Add(new PagingLink(nextPageIndex, hasNextPage, "Next"));
 
-        var hasLastPage = PageIndex <= TotalPages;
+        var hasLastPage = PageIndex < TotalPages;
         var LastPageIndex = PageIndex = TotalPages;
         pageItems.Add(new PagingLink(LastPageIndex, hasLastPage, "Last"));
 
