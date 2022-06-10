@@ -7,6 +7,7 @@ namespace BlazorAppQLDT.Client.Services.FAQAppService
         List<AnswersModel> FQA { get; set; }
 
         Task GetFAQApps();
+        
         Task GetQuestions();
         Task GetAnswers();
         Task GetQuestionByFAQId(int id);

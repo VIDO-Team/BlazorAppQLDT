@@ -10,26 +10,6 @@
 
 <PageTitle>FAQ</PageTitle>
 <h3>FAQ</h3>
-<div>
-<BlazoredTypeahead SearchMethod="@SearchQuestion"
-                   TValue="QuestionModel"
-                   TItem="QuestionModel"
-                   Value="selectedQuestion"
-                   ValueChanged="HandleSearch"
-                   ValueExpression="@(() => selectedQuestion)"
-                   placeholder="Search...">
-    <SelectedTemplate>
-        @context.Question
-    </SelectedTemplate>
-    <ResultTemplate>
-        @context.Question
-    </ResultTemplate>
-    <NotFoundTemplate>
-        Sorry, there weren't any questions found.
-    </NotFoundTemplate>
-</BlazoredTypeahead>
-</div>
-
 <br>
 <GridColumn OnSearchTextChanged="OnQuestionSearchTextChanged"></GridColumn>
 <br>
@@ -38,9 +18,6 @@
 <button class="btn btn-primary" @onclick="CreateNewFAQ">Create FAQ</button>
 </div>
 
- @* <div id="searchbox">
-<input type="text" placeholder="Search..." @bind-value="searchTerm"/><button class = "btn btn" @onclick="(()=>SearchTerm())">Search</button>
-</div>  *@
 <br>
 <table class="table table-bordered">
     <thead>
@@ -78,26 +55,6 @@
 </table>
 <br>
 
- @* <div>
-    <button class="btn btn-secondary" @onclick ="@(e => NavigateTo("first"))">@("<<")</button>
-    <button class="btn btn-secondary" @onclick ="@(e => NavigateTo("prev"))">@("<")</button>
-    @for (int i = 0; i < TotalPages; i++)
-    {
-         @if(i<=5 || i>TotalPages-5){ 
-             var pageNumber = i;
-            <button class="btn @(CurrentPage == pageNumber? "btn-dark":"btn-info")" 
-                    @onclick="@(e => UpdateList(pageNumber))">@(i + 1)</button> 
-         } 
-         else{
-            var pageNumber = i;
-            <button class="btn @(CurrentPage == pageNumber? "btn-dark":"btn-info")" >...</button>
-            i=TotalPages-6;
-        } 
-    }
-     <button class="btn btn-secondary" @onclick ="@(e => NavigateTo("next"))">@(">")</button>
-    <button class="btn btn-secondary" @onclick ="@(e => NavigateTo("last"))">@(">>")</button>
-</div>  *@
-
 <Confirm ConfirmationChanged="OnConfirmDeleteQuestion" @ref="DeleteConfirmation" >
 </Confirm>
 
@@ -107,46 +64,22 @@
             OnSelectedPage="@SelectedPage">
 </Pagination>
 
-
-
-
-
-
-
 @code {
     private QuestionModel selectedQuestion;
-    private IEnumerable<QuestionModel> allQuestion = null;
     private IEnumerable<QuestionModel> question = Enumerable.Empty<QuestionModel>();
-    @* QuestionModel question = new QuestionModel {FQA = new AnswersModel()}; *@
-    private string searchTerm;
     string searchText = "";
     private int pageIndex = 1;
     private int itemsPerPage = 5;
     private int totalPages = 1;
-    
-    public int PageSize { get; set; }
-    public int TotalPages { get; set; }
-    public int CurrentPage { get; set; }
-    public bool IsGridViewFiltered { get; set; }
-
     private int DeleteId { get; set; }
     protected BlazorAppQLDT.Componants.ConfirmBase DeleteConfirmation { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         await FAQAppService.GetQuestions();
-
-        @* PageSize = 5;
-
-        question = FAQAppService.FQADetails.Take(PageSize).ToList();
-        TotalPages = GetTotalPage();
-        
-        base.OnInitialized(); *@
-
         //pagination
         question = FAQAppService.FQADetails.Take(itemsPerPage).ToList();
         totalPages = GetTotalPage();
-
     }
 
     int GetTotalPage()
@@ -163,60 +96,10 @@
         return pageSize;
     }
 
-    @* protected override void OnAfterRender(bool firstRender)
-    {
-        if(!firstRender && IsGridViewFiltered)
-        {
-            UpdateList();
-            IsGridViewFiltered = false;
-
-            StateHasChanged();
-        }
-        base.OnAfterRender(firstRender);
-    } *@
-
-    protected void UpdateList(int pageNumber = 0)
-    {
-        if(string.IsNullOrEmpty(searchText))
-        {
-            question = FAQAppService.FQADetails.ToList().Skip(pageNumber * PageSize).Take(PageSize).ToList();
-        }
-        else
-        {
-            question = FAQAppService.FQADetails.Where(q => q.Question.ToLower().Contains(searchText.ToLower()) || q.FQA.Answers.ToLower().Contains(searchText.ToLower())).ToList().Skip(pageNumber * PageSize).Take(PageSize).ToList();
-        }
-        
-        TotalPages = GetTotalPage();
-        CurrentPage = pageNumber;
-
-        @* totalPages = GetTotalPage();
-        pageIndex = pageNumber; *@
-
-    }
-
-    protected void NavigateTo(string direction)
-    {
-        if(direction == "prev" && CurrentPage != 0)
-            CurrentPage -= 1;
-        if(direction == "next" && CurrentPage != TotalPages - 1)
-            CurrentPage += 1;
-        if(direction == "first")
-            CurrentPage = 0;
-        if(direction == "last")
-            CurrentPage = TotalPages - 1;
-
-        UpdateList(CurrentPage);
-    }
 
     //pagination
     private void SelectedPage(int selectedPageIndex = 1)
     {
-        @* if (FAQAppService.FQADetails != null)
-        {
-            pageIndex = selectedPageIndex;
-            var skipCount = itemsPerPage * (pageIndex - 1);
-            question = FAQAppService.FQADetails.Skip(skipCount).Take(itemsPerPage);
-        } *@
         pageIndex = selectedPageIndex;
         var skipCount = itemsPerPage * (pageIndex - 1);
         if (string.IsNullOrEmpty(searchText))
@@ -231,27 +114,12 @@
         totalPages = GetTotalPage();
     }
     
-    @* async void SearchTerm()
-    {
-        await FAQAppService.SearchQuestion(searchTerm);
-        if(FAQAppService.FQADetails != null)
-        {
-            totalPages = (int)(FAQAppService.FQADetails.Count() / itemsPerPage);
-            question = FAQAppService.FQADetails.Skip(0).Take(itemsPerPage);
-        }
-    } *@
 
     private void HandleSearch(QuestionModel question)
     {
         if (question == null) return;
         selectedQuestion = question;
         NavigationManager.NavigateTo($"editquestion/{selectedQuestion.Id}");
-    }
-
-    private async Task<IEnumerable<QuestionModel>> SearchQuestion(string searchText)
-    {
-        var response = await FAQAppService.SearchQuestion(searchText);
-        return response;
     }
 
     void ShowFAQ(int id)
@@ -282,33 +150,13 @@
         {
             await FAQAppService.DeleteQuestion(DeleteId);
             await OnInitializedAsync();
+            pageIndex = 1;
         }
     }
-
-    @* private async Task<List<QuestionModel>> OnQuestionSearchTextChanged(ChangeEventArgs changeEventArgs)
-    {
-        searchText = changeEventArgs.Value.ToString();
-        return question = await FAQAppService.SearchQuestion(searchText);
-    } *@
 
     async void OnQuestionSearchTextChanged(ChangeEventArgs changeEventArgs)
     {
         searchText = changeEventArgs.Value.ToString();
         SelectedPage();
-        @* if(string.IsNullOrEmpty(searchText))
-        {
-            question = FAQAppService.FQADetails.ToList().Skip(0).Take(itemsPerPage);
-        }
-        else
-        {
-            question = FAQAppService.FQADetails.Where(q => q.Question.ToLower().Contains(searchText.ToLower()) || q.FQA.Answers.ToLower().Contains(searchText.ToLower())).ToList().Skip(0).Take(itemsPerPage);
-        } *@
-        
-
-        @* totalPages = GetTotalPage();  *@
-        @* pageIndex = 1; *@
-        @* UpdateList(); *@
-        @* SelectedPage(pageIndex); *@
-
     }
 }

@@ -30,7 +30,6 @@
     </div>
     <br />
     <button type="submit" class="btn btn-primary">Update</button>
-    <button type="button" class="btn btn-danger" @onclick="Delete">Delete</button>
     <button type="button" class="btn btn-secondary" @onclick="Back">Back</button>
 </EditForm>
 
@@ -38,8 +37,6 @@
 {
     [Parameter]
     public int? Id { get; set; }
-
-    @* FAQAppModel faq = new FAQAppModel(); *@
     QuestionModel question = new QuestionModel {FQA = new AnswersModel()};
     protected override async Task OnInitializedAsync()
     {
@@ -56,12 +53,6 @@
         await FAQAppService.UpdateQuestion(question);
     }
 
-    async Task Delete()
-    {
-        if(Id != null)
-            await FAQAppService.DeleteQuestion(question.Id);
-        NavigationManager.NavigateTo("/faqapps");
-    }
     async Task Back()
     {
         NavigationManager.NavigateTo("/faqapps");
